@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import API from "../api";
 
 import Sidebar from "../components/Sidebar";
@@ -16,19 +15,15 @@ import toast from "react-hot-toast";
 export default function Dashboard() {
 
   // =========================
-  // NAVIGATION
-  // =========================
-
-  const navigate = useNavigate();
-
-  // =========================
   // STATES
   // =========================
 
   const [description, setDescription] = useState("");
+
   const [image, setImage] = useState(null);
 
   const [latitude, setLatitude] = useState("");
+
   const [longitude, setLongitude] = useState("");
 
   const [complaints, setComplaints] = useState([]);
@@ -87,6 +82,8 @@ export default function Dashboard() {
 
         setLongitude(position.coords.longitude);
 
+        toast.success("Location detected");
+
       },
 
       (error) => {
@@ -115,8 +112,12 @@ export default function Dashboard() {
     try {
 
       await API.put(
+
         `/complaint/${complaintId}?status=${status}`
+
       );
+
+      toast.success("Status Updated");
 
       fetchComplaints();
 
@@ -209,8 +210,11 @@ export default function Dashboard() {
       // CLEAR FORM
 
       setDescription("");
+
       setImage(null);
+
       setLatitude("");
+
       setLongitude("");
 
       setLoading(false);
@@ -241,7 +245,7 @@ export default function Dashboard() {
 
       {/* MAIN CONTENT */}
 
-      <div className="ml-[90px] md:ml-[220px] w-full px-4 md:px-10 py-6">
+      <div className="ml-[90px] md:ml-[220px] w-full px-4 md:px-10 py-4 md:py-6">
 
         {/* TOPBAR */}
 
@@ -253,35 +257,46 @@ export default function Dashboard() {
 
         {/* ANALYTICS */}
 
-        <AnalyticsCards complaints={complaints} />
+        <div className="mt-10">
 
-        {/* FORM */}
+          <AnalyticsCards complaints={complaints} />
 
-        <ComplaintForm
+        </div>
 
-          description={description}
-          setDescription={setDescription}
+        {/* COMPLAINT FORM */}
 
-          image={image}
-          setImage={setImage}
+        <div className="mt-10">
 
-          latitude={latitude}
-          setLatitude={setLatitude}
+          <ComplaintForm
 
-          longitude={longitude}
-          setLongitude={setLongitude}
+            description={description}
+            setDescription={setDescription}
 
-          getCurrentLocation={getCurrentLocation}
+            image={image}
+            setImage={setImage}
 
-          handleSubmit={handleSubmit}
+            latitude={latitude}
+            setLatitude={setLatitude}
 
-          loading={loading}
+            longitude={longitude}
+            setLongitude={setLongitude}
 
-        />
+            getCurrentLocation={getCurrentLocation}
+
+            handleSubmit={handleSubmit}
+
+            loading={loading}
+
+          />
+
+        </div>
 
         {/* MAP */}
 
-        <div id="map">
+        <div
+          id="map"
+          className="mt-14"
+        >
 
           <ComplaintMap complaints={complaints} />
 
@@ -289,15 +304,21 @@ export default function Dashboard() {
 
         {/* CHARTS */}
 
-        <div id="charts">
+        <div
+          id="charts"
+          className="mt-14"
+        >
 
           <AnalyticsCharts complaints={complaints} />
 
         </div>
 
-        {/* COMPLAINTS */}
+        {/* COMPLAINT CARDS */}
 
-        <div id="complaints">
+        <div
+          id="complaints"
+          className="mt-14"
+        >
 
           <ComplaintCards
 

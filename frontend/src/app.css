@@ -1,18 +1,51 @@
+html,
+body,
+#root {
+
+  width: 100%;
+
+  min-height: 100vh;
+
+  overflow-x: hidden;
+
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+  background: #050816;
+
+  font-family: sans-serif;
+
+}
+
+* {
+
+  box-sizing: border-box;
+
+}
+
 .container {
 
   width: 100%;
+
   min-height: 100vh;
 
   display: flex;
+
   justify-content: center;
+
   align-items: center;
 
   padding: 20px;
+
 }
 
 .card {
 
   width: 100%;
+
   max-width: 450px;
 
   background: rgba(255,255,255,0.08);
@@ -29,7 +62,10 @@
     0 8px 32px rgba(0,0,0,0.4);
 
   text-align: center;
+
 }
+
+/* TITLE */
 
 .card h1 {
 
@@ -38,7 +74,12 @@
   font-size: 48px;
 
   margin-bottom: 10px;
+
+  line-height: 1.2;
+
 }
+
+/* DESCRIPTION */
 
 .card p {
 
@@ -47,16 +88,28 @@
   margin-bottom: 30px;
 
   font-size: 18px;
+
+  line-height: 1.6;
+
 }
+
+/* FORM */
 
 form {
 
   display: flex;
+
   flex-direction: column;
+
   gap: 18px;
+
 }
 
+/* INPUT */
+
 input {
+
+  width: 100%;
 
   padding: 14px;
 
@@ -71,14 +124,20 @@ input {
   font-size: 16px;
 
   outline: none;
+
 }
 
 input::placeholder {
 
   color: #94a3b8;
+
 }
 
+/* BUTTON */
+
 button {
+
+  width: 100%;
 
   padding: 14px;
 
@@ -102,9 +161,65 @@ button {
   cursor: pointer;
 
   transition: 0.3s;
+
 }
 
 button:hover {
 
   transform: scale(1.03);
+
+}
+
+/* IMAGES */
+
+img {
+
+  max-width: 100%;
+
+  height: auto;
+
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 768px) {
+
+  .card {
+
+    padding: 25px;
+
+    border-radius: 20px;
+
+  }
+
+  .card h1 {
+
+    font-size: 34px;
+
+  }
+
+  .card p {
+
+    font-size: 15px;
+
+    margin-bottom: 20px;
+
+  }
+
+  input {
+
+    font-size: 14px;
+
+    padding: 12px;
+
+  }
+
+  button {
+
+    font-size: 14px;
+
+    padding: 12px;
+
+  }
+
 }
