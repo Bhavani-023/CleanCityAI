@@ -1,13 +1,7 @@
-from sqlalchemy import Column, Integer, String
+from pydantic import BaseModel, EmailStr
 
-from app.database import Base
+class UserCreate(BaseModel):
 
-class User(Base):
+    email: EmailStr
 
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True, index=True)
-
-    email = Column(String, unique=True, index=True)
-
-    password = Column(String)
+    password: str
