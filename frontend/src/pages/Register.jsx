@@ -55,7 +55,15 @@ export default function Register() {
 
       console.log(error);
 
-      toast.error("Registration Failed");
+      toast.error(
+
+  error.response?.data?.detail ||
+
+  "Registration Failed"
+
+);
+
+console.log(error.response);
 
     }
 
