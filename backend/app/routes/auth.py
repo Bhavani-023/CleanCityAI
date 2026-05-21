@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
+from app.auth.jwt_handler import create_access_token
 from app.database import get_db
 from app.models.user import User
 from app.schemas.user import UserCreate
@@ -116,9 +116,12 @@ def login(
                 detail="Invalid Password"
             )
 
+        token = create_access_token({
+            "user_id": existing_user.id
+            })
         return {
-            "access_token": "login_success"
-        }
+            "access_token": token
+            }
 
     except Exception as e:
 

@@ -187,9 +187,8 @@ export default function Dashboard() {
         {
 
           headers: {
-
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "multipart/form-data",
-
           },
 
         }
