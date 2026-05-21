@@ -1,28 +1,31 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
+
 import os
 
 from app.routes import auth, complaint
 from app.database import engine
 
 from app.models.user import User
-
 from app.models.complaint import Complaint
 
 # =========================
 # CREATE FASTAPI APP
 # =========================
-app = FastAPI()
-User.metadata.create_all(bind=engine)
 
+app = FastAPI()
+
+# =========================
+# CREATE DATABASE TABLES
+# =========================
+
+User.metadata.create_all(bind=engine)
 Complaint.metadata.create_all(bind=engine)
 
 # =========================
-# CORS
+# CORS CONFIGURATION
 # =========================
-from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
 
@@ -30,11 +33,7 @@ app.add_middleware(
 
     allow_origins=[
 
-        "https://clean-city-ai-aar.vercel.app",
-
-        "https://clean-city-ai-aar-git-main-bhavani-023s-projects.vercel.app",
-
-        "*"
+        "https://clean-city-ai-aar.vercel.app"
 
     ],
 
@@ -49,29 +48,39 @@ app.add_middleware(
 # =========================
 # INCLUDE ROUTES
 # =========================
+
 app.include_router(auth.router)
 app.include_router(complaint.router)
 
 # =========================
 # CREATE UPLOADS FOLDER
 # =========================
+
 os.makedirs("uploads", exist_ok=True)
 
 # =========================
 # SERVE UPLOADED IMAGES
 # =========================
+
 app.mount(
+
     "/uploads",
+
     StaticFiles(directory="uploads"),
+
     name="uploads"
+
 )
 
 # =========================
-# ROOT API
+# ROOT ROUTE
 # =========================
+
 @app.get("/")
 def home():
 
     return {
+
         "message": "CleanCityAI Backend Running"
+
     }
