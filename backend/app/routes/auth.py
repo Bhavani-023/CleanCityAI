@@ -1,40 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
 from app.auth.jwt_handler import create_access_token
+from app.auth.security import (
+    hash_password,
+    verify_password
+)
+
 from app.database import get_db
 from app.models.user import User
 from app.schemas.user import UserCreate
 
-from passlib.context import CryptContext
-
 router = APIRouter()
-
-pwd_context = CryptContext(
-    schemes=["bcrypt"],
-    deprecated="auto"
-)
-
-# =========================
-# HASH PASSWORD
-# =========================
-
-def hash_password(password: str):
-
-    return pwd_context.hash(password)
-
-# =========================
-# VERIFY PASSWORD
-# =========================
-
-def verify_password(
-    plain_password,
-    hashed_password
-):
-
-    return pwd_context.verify(
-        plain_password,
-        hashed_password
-    )
 
 # =========================
 # REGISTER
@@ -42,26 +19,39 @@ def verify_password(
 
 @router.post("/register")
 def register(
+
     user: UserCreate,
+
     db: Session = Depends(get_db)
+
 ):
+
+    existing_user = db.query(User).filter(
+
+        User.email == user.email
+
+    ).first()
+
+    if existing_user:
+
+        raise HTTPException(
+
+            status_code=400,
+
+            detail="Email already registered"
+
+        )
 
     try:
 
-        existing_user = db.query(User).filter(
-            User.email == user.email
-        ).first()
-
-        if existing_user:
-
-            raise HTTPException(
-                status_code=400,
-                detail="Email already registered"
-            )
+        # CREATE USER
 
         new_user = User(
+
             email=user.email,
+
             password=hash_password(user.password)
+
         )
 
         db.add(new_user)
@@ -71,7 +61,9 @@ def register(
         db.refresh(new_user)
 
         return {
+
             "message": "User created successfully"
+
         }
 
     except Exception as e:
@@ -79,8 +71,11 @@ def register(
         print("REGISTER ERROR:", e)
 
         raise HTTPException(
+
             status_code=500,
-            detail=str(e)
+
+            detail="Registration Failed"
+
         )
 
 # =========================
@@ -89,45 +84,75 @@ def register(
 
 @router.post("/login")
 def login(
+
     user: UserCreate,
+
     db: Session = Depends(get_db)
+
 ):
+
+    existing_user = db.query(User).filter(
+
+        User.email == user.email
+
+    ).first()
+
+    # CHECK EMAIL
+
+    if not existing_user:
+
+        raise HTTPException(
+
+            status_code=401,
+
+            detail="Invalid Email"
+
+        )
+
+    # VERIFY PASSWORD
+
+    if not verify_password(
+
+        user.password,
+
+        existing_user.password
+
+    ):
+
+        raise HTTPException(
+
+            status_code=401,
+
+            detail="Invalid Password"
+
+        )
 
     try:
 
-        existing_user = db.query(User).filter(
-            User.email == user.email
-        ).first()
-
-        if not existing_user:
-
-            raise HTTPException(
-                status_code=401,
-                detail="Invalid Email"
-            )
-
-        if not verify_password(
-            user.password,
-            existing_user.password
-        ):
-
-            raise HTTPException(
-                status_code=401,
-                detail="Invalid Password"
-            )
+        # CREATE JWT TOKEN
 
         token = create_access_token({
+
             "user_id": existing_user.id
-            })
+
+        })
+
         return {
-            "access_token": token
-            }
+
+            "access_token": token,
+
+            "token_type": "bearer"
+
+        }
 
     except Exception as e:
 
         print("LOGIN ERROR:", e)
 
         raise HTTPException(
+
             status_code=500,
-            detail=str(e)
+
+            detail="Login Failed"
+
         )
