@@ -10,85 +10,34 @@ from app.database import engine
 from app.models.user import User
 from app.models.complaint import Complaint
 
-# =========================
-# CREATE FASTAPI APP
-# =========================
-
 app = FastAPI()
 
-# =========================
-# CREATE DATABASE TABLES
-# =========================
-
+# DATABASE TABLES
 User.metadata.create_all(bind=engine)
 Complaint.metadata.create_all(bind=engine)
 
-# =========================
-# CORS CONFIGURATION
-# =========================
-
-origins = [
-
-    "http://localhost:5173",
-
-    "https://clean-city-ai-aar.vercel.app",
-
-    "https://clean-city-ai-aar-git-main-bhavani-reddy-s-projects.vercel.app",
-
-    "https://clean-city-ai-aar-8oxm0v6ws-bhavani-reddy-s-projects.vercel.app",
-
-]
-
+# CORS
 app.add_middleware(
-
     CORSMiddleware,
-
-    allow_origins=origins,
-
+    allow_origins=["*"],
     allow_credentials=True,
-
     allow_methods=["*"],
-
     allow_headers=["*"],
-
 )
 
-# =========================
-# INCLUDE ROUTES
-# =========================
-
+# ROUTES
 app.include_router(auth.router)
 app.include_router(complaint.router)
 
-# =========================
-# CREATE UPLOADS FOLDER
-# =========================
-
+# UPLOADS
 os.makedirs("uploads", exist_ok=True)
 
-# =========================
-# SERVE UPLOADED IMAGES
-# =========================
-
 app.mount(
-
     "/uploads",
-
     StaticFiles(directory="uploads"),
-
     name="uploads"
-
 )
-
-# =========================
-# ROOT ROUTE
-# =========================
 
 @app.get("/")
 def home():
-
-    return {
-
-        "message": "CleanCityAI Backend Running"
-
-    }
+    return {"message": "CleanCityAI Backend Running"}
