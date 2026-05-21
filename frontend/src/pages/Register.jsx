@@ -29,40 +29,45 @@ export default function Register() {
   // REGISTER FUNCTION
   // =========================
 
-  const handleRegister = async () => {
+    const handleRegister = async () => {
 
-    try {
+  try {
 
-      await API.post(
+    if (!email || !password) {
+      toast.error("Please fill all fields");
+      return;
+    }
 
-        "/register",
+    console.log({
+      email,
+      password,
+    });
 
-        {
+    const response = await API.post(
+      "/register",
+      {
+        email: email.trim(),
+        password: password.trim(),
+      }
+    );
 
-          email,
+    console.log(response.data);
 
-          password,
+    toast.success("Account Created Successfully");
 
-        }
+    navigate("/login");
 
-      );
+  } catch (error) {
 
-      toast.success("Account Created Successfully");
+    console.log(error.response?.data);
 
-      navigate("/login");
+    toast.error(
+      error.response?.data?.detail || "Registration Failed"
+    );
 
-    } catch (error) {
+  }
 
-      console.log(error);
-
-      toast.error(
-
-  error.response?.data?.detail ||
-
-  "Registration Failed"
-
-);
-
+};
 console.log(error.response);
 
     }
