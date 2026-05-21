@@ -14,17 +14,25 @@ pwd_context = CryptContext(
     deprecated="auto"
 )
 
+# =========================
 # HASH PASSWORD
-def hash_password(password: str):
-    return pwd_context.hash(password[:72])
+# =========================
 
+def hash_password(password: str):
+
+    return pwd_context.hash(password)
+
+# =========================
 # VERIFY PASSWORD
+# =========================
+
 def verify_password(
     plain_password,
     hashed_password
 ):
+
     return pwd_context.verify(
-        plain_password[:72],
+        plain_password,
         hashed_password
     )
 
@@ -38,30 +46,42 @@ def register(
     db: Session = Depends(get_db)
 ):
 
-    existing_user = db.query(User).filter(
-        User.email == user.email
-    ).first()
+    try:
 
-    if existing_user:
-        raise HTTPException(
-            status_code=400,
-            detail="Email already registered"
+        existing_user = db.query(User).filter(
+            User.email == user.email
+        ).first()
+
+        if existing_user:
+
+            raise HTTPException(
+                status_code=400,
+                detail="Email already registered"
+            )
+
+        new_user = User(
+            email=user.email,
+            password=hash_password(user.password)
         )
 
-    new_user = User(
-        email=user.email,
-        password=hash_password(user.password)
-    )
+        db.add(new_user)
 
-    db.add(new_user)
+        db.commit()
 
-    db.commit()
+        db.refresh(new_user)
 
-    db.refresh(new_user)
+        return {
+            "message": "User created successfully"
+        }
 
-    return {
-        "message": "User created successfully"
-    }
+    except Exception as e:
+
+        print("REGISTER ERROR:", e)
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
 
 # =========================
 # LOGIN
@@ -73,25 +93,38 @@ def login(
     db: Session = Depends(get_db)
 ):
 
-    existing_user = db.query(User).filter(
-        User.email == user.email
-    ).first()
+    try:
 
-    if not existing_user:
+        existing_user = db.query(User).filter(
+            User.email == user.email
+        ).first()
+
+        if not existing_user:
+
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid Email"
+            )
+
+        if not verify_password(
+            user.password,
+            existing_user.password
+        ):
+
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid Password"
+            )
+
+        return {
+            "access_token": "login_success"
+        }
+
+    except Exception as e:
+
+        print("LOGIN ERROR:", e)
+
         raise HTTPException(
-            status_code=401,
-            detail="Invalid Email"
+            status_code=500,
+            detail=str(e)
         )
-
-    if not verify_password(
-        user.password,
-        existing_user.password
-    ):
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid Password"
-        )
-
-    return {
-        "access_token": "login_success"
-    }
