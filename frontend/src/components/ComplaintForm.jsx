@@ -1,3 +1,4 @@
+import { ClipLoader } from "react-spinners";
 export default function ComplaintForm({
 
   description,
@@ -90,13 +91,23 @@ export default function ComplaintForm({
 
           {/* SUBMIT BUTTON */}
 
-          <button
-            disabled={loading}
+            <button
             onClick={handleSubmit}
-            className="w-full bg-cyan-500 hover:bg-cyan-600 p-5 rounded-2xl text-lg font-semibold transition duration-300 shadow-lg shadow-cyan-500/30"
-          >
-            {loading ? "Submitting..." : "Submit Complaint"}
-          </button>
+            disabled={loading}
+            className="w-full bg-cyan-500 hover:bg-cyan-600 transition duration-300 p-4 rounded-2xl text-xl font-bold shadow-lg shadow-cyan-500/30 flex items-center justify-center gap-3"
+            >
+                {loading ? (
+                    <>
+                    <ClipLoader
+                    color="#ffffff"
+                    size={22}
+                    />
+                    Uploading...
+                    </>
+                    ) : (
+                        "Submit Complaint"
+                        )}
+                        </button>
 
         </div>
 

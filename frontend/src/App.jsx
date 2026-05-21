@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";
-
+import { Navigate } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -63,10 +63,13 @@ function App() {
           />
 
           <Route
-            path="/dashboard"
-            element={<Dashboard />}
+          path="/dashboard"
+          element={
+            localStorage.getItem("token")
+            ? <Dashboard />
+            : <Navigate to="/login" />
+          }
           />
-
         </Routes>
 
       </BrowserRouter>
