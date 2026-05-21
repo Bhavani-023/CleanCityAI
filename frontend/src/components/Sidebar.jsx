@@ -8,91 +8,126 @@ import {
 export default function Sidebar() {
 
   return (
+
     <>
 
-    <div className="fixed left-0 top-0 h-screen w-[70px] md:w-[220px] bg-[#070B1A] border-r border-white/10 p-3 md:p-4 md:p-6 z-50">
+      {/* DESKTOP SIDEBAR */}
 
-      {/* LOGO */}
+      <div className="hidden md:flex fixed left-0 top-0 h-screen w-[220px] bg-[#070B1A] border-r border-white/10 p-6 z-50 flex-col">
 
-      <h1 className="text-lg md:text-3xl font-bold text-cyan-400 mb-10 md:mb-14">
+        <h1 className="text-3xl font-bold text-cyan-400 mb-14">
 
-        <span className="hidden md:block">
           CleanCityAI
-        </span>
 
-        <span className="block md:hidden">
-          AI
-        </span>
+        </h1>
 
-      </h1>
+        <div className="flex flex-col gap-5">
 
-      {/* MENU */}
+          <a
+            href="#"
+            className="flex items-center gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-4 rounded-2xl"
+          >
 
-      <div className="flex flex-col gap-4 md:gap-5">
+            <LayoutDashboard size={22} />
 
-        {/* DASHBOARD */}
+            <span className="text-lg font-semibold">
+              Dashboard
+            </span>
 
-        <a
-          href="#"
-          className="flex items-center justify-center md:justify-start gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-3 md:p-4 rounded-2xl"
-        >
+          </a>
 
-          <LayoutDashboard size={22} />
+          <a
+            href="#map"
+            className="flex items-center gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-4 rounded-2xl"
+          >
 
-          <span className="hidden md:block text-lg font-semibold">
-            Dashboard
-          </span>
+            <MapPinned size={22} />
 
-        </a>
+            <span className="text-lg font-semibold">
+              Map
+            </span>
 
-        {/* MAP */}
+          </a>
 
-        <a
-          href="#map"
-          className="flex items-center justify-center md:justify-start gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-3 md:p-4 rounded-2xl"
-        >
+          <a
+            href="#charts"
+            className="flex items-center gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-4 rounded-2xl"
+          >
 
-          <MapPinned size={22} />
+            <FileBarChart2 size={22} />
 
-          <span className="hidden md:block text-lg font-semibold">
-            Map Analytics
-          </span>
+            <span className="text-lg font-semibold">
+              Reports
+            </span>
 
-        </a>
+          </a>
 
-        {/* REPORTS */}
+          <a
+            href="#complaints"
+            className="flex items-center gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-4 rounded-2xl"
+          >
 
-        <a
-          href="#charts"
-          className="flex items-center justify-center md:justify-start gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-3 md:p-4 rounded-2xl"
-        >
+            <Shield size={22} />
 
-          <FileBarChart2 size={22} />
+            <span className="text-lg font-semibold">
+              Complaints
+            </span>
 
-          <span className="hidden md:block text-lg font-semibold">
-            Reports
-          </span>
+          </a>
 
-        </a>
-
-        {/* ADMIN */}
-
-        <a
-          href="#complaints"
-          className="flex items-center justify-center md:justify-start gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-3 md:p-4 rounded-2xl"
-        >
-
-          <Shield size={22} />
-
-          <span className="hidden md:block text-lg font-semibold">
-            Admin
-          </span>
-
-        </a>
+        </div>
 
       </div>
 
-    </div>
+      {/* MOBILE BOTTOM NAVBAR */}
+
+      <div className="md:hidden fixed bottom-0 left-0 w-full bg-[#070B1A]/95 backdrop-blur-xl border-t border-white/10 z-50">
+
+        <div className="flex justify-around items-center py-3">
+
+          <a href="#" className="flex flex-col items-center text-cyan-400">
+
+            <LayoutDashboard size={22} />
+
+            <span className="text-xs mt-1">
+              Home
+            </span>
+
+          </a>
+
+          <a href="#map" className="flex flex-col items-center text-gray-300">
+
+            <MapPinned size={22} />
+
+            <span className="text-xs mt-1">
+              Map
+            </span>
+
+          </a>
+
+          <a href="#charts" className="flex flex-col items-center text-gray-300">
+
+            <FileBarChart2 size={22} />
+
+            <span className="text-xs mt-1">
+              Reports
+            </span>
+
+          </a>
+
+          <a href="#complaints" className="flex flex-col items-center text-gray-300">
+
+            <Shield size={22} />
+
+            <span className="text-xs mt-1">
+              Complaints
+            </span>
+
+          </a>
+
+        </div>
+
+      </div>
 
     </>
 
