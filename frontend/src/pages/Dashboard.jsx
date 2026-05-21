@@ -1,25 +1,18 @@
 import { useState, useEffect } from "react";
-
 import { useNavigate } from "react-router-dom";
-
 import API from "../api";
 
 import Sidebar from "../components/Sidebar";
-
 import Topbar from "../components/Topbar";
-
 import HeroSection from "../components/HeroSection";
-
 import AnalyticsCards from "../components/AnalyticsCards";
-
 import AnalyticsCharts from "../components/AnalyticsCharts";
-
 import ComplaintForm from "../components/ComplaintForm";
-
 import ComplaintMap from "../components/ComplaintMap";
-
 import ComplaintCards from "../components/ComplaintCards";
+
 import toast from "react-hot-toast";
+
 export default function Dashboard() {
 
   // =========================
@@ -33,14 +26,13 @@ export default function Dashboard() {
   // =========================
 
   const [description, setDescription] = useState("");
-
   const [image, setImage] = useState(null);
 
   const [latitude, setLatitude] = useState("");
-
   const [longitude, setLongitude] = useState("");
 
   const [complaints, setComplaints] = useState([]);
+
   const [loading, setLoading] = useState(false);
 
   // =========================
@@ -50,17 +42,21 @@ export default function Dashboard() {
   const fetchComplaints = async () => {
 
     try {
+
       setLoading(true);
 
       const response = await API.get("/complaints");
 
       setComplaints(response.data);
+
       setLoading(false);
 
     } catch (error) {
 
       console.log(error);
+
       setLoading(false);
+
       toast.error("Failed to fetch complaints");
 
     }
@@ -112,7 +108,6 @@ export default function Dashboard() {
   const updateComplaintStatus = async (
 
     complaintId,
-
     status
 
   ) => {
@@ -120,9 +115,7 @@ export default function Dashboard() {
     try {
 
       await API.put(
-
         `/complaint/${complaintId}?status=${status}`
-
       );
 
       fetchComplaints();
@@ -130,6 +123,8 @@ export default function Dashboard() {
     } catch (error) {
 
       console.log(error);
+
+      toast.error("Status update failed");
 
     }
 
@@ -142,13 +137,16 @@ export default function Dashboard() {
   const handleSubmit = async () => {
 
     try {
+
       setLoading(true);
 
-      // VALIDATIONS
+      // VALIDATION
 
       if (!description) {
 
         toast.error("Please enter description");
+
+        setLoading(false);
 
         return;
 
@@ -158,6 +156,8 @@ export default function Dashboard() {
 
         toast.error("Please upload image");
 
+        setLoading(false);
+
         return;
 
       }
@@ -165,6 +165,8 @@ export default function Dashboard() {
       if (!latitude || !longitude) {
 
         toast.error("Please select location");
+
+        setLoading(false);
 
         return;
 
@@ -187,8 +189,11 @@ export default function Dashboard() {
         {
 
           headers: {
+
             Authorization: `Bearer ${localStorage.getItem("token")}`,
+
             "Content-Type": "multipart/form-data",
+
           },
 
         }
@@ -196,26 +201,24 @@ export default function Dashboard() {
       );
 
       toast.success("Complaint Submitted Successfully");
-      setLoading(false);
 
-      // REFRESH COMPLAINTS
+      // REFRESH DATA
 
       fetchComplaints();
 
       // CLEAR FORM
 
       setDescription("");
-
       setImage(null);
-
       setLatitude("");
-
       setLongitude("");
 
+      setLoading(false);
+
     } catch (error) {
-      
 
       console.log(error);
+
       setLoading(false);
 
       toast.error("Submission Failed");
@@ -230,7 +233,7 @@ export default function Dashboard() {
 
   return (
 
-    <div className="min-h-screen bg-[#050816] text-white flex overflow-x-hidden">
+    <div className="min-h-screen bg-[#050816] text-white overflow-x-hidden">
 
       {/* SIDEBAR */}
 
@@ -238,7 +241,7 @@ export default function Dashboard() {
 
       {/* MAIN CONTENT */}
 
-      <div className="ml-[260px] w-full p-10">
+      <div className="ml-[90px] md:ml-[220px] w-full px-4 md:px-10 py-6">
 
         {/* TOPBAR */}
 
@@ -257,24 +260,21 @@ export default function Dashboard() {
         <ComplaintForm
 
           description={description}
-
           setDescription={setDescription}
 
           image={image}
-
           setImage={setImage}
 
           latitude={latitude}
-
           setLatitude={setLatitude}
 
           longitude={longitude}
-
           setLongitude={setLongitude}
 
           getCurrentLocation={getCurrentLocation}
 
           handleSubmit={handleSubmit}
+
           loading={loading}
 
         />
@@ -295,7 +295,7 @@ export default function Dashboard() {
 
         </div>
 
-        {/* COMPLAINT CARDS */}
+        {/* COMPLAINTS */}
 
         <div id="complaints">
 
@@ -304,6 +304,7 @@ export default function Dashboard() {
             complaints={complaints}
 
             updateComplaintStatus={updateComplaintStatus}
+
             loading={loading}
 
           />

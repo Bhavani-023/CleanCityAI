@@ -11,30 +11,67 @@ function App() {
 
   return (
 
-    <BrowserRouter>
+    <div className="overflow-x-hidden">
 
-      {/* TOAST */}
+      <BrowserRouter>
 
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-      />
+        {/* TOASTER */}
 
-      {/* ROUTES */}
+        <Toaster
 
-      <Routes>
+          position="top-right"
 
-        <Route path="/" element={<Landing />} />
+          reverseOrder={false}
 
-        <Route path="/login" element={<Login />} />
+          toastOptions={{
 
-        <Route path="/register" element={<Register />} />
+            style: {
 
-        <Route path="/dashboard" element={<Dashboard />} />
+              background: "#111827",
 
-      </Routes>
+              color: "#fff",
 
-    </BrowserRouter>
+              border: "1px solid rgba(255,255,255,0.1)",
+
+              borderRadius: "16px",
+
+              padding: "16px",
+
+            },
+
+          }}
+
+        />
+
+        {/* ROUTES */}
+
+        <Routes>
+
+          <Route
+            path="/"
+            element={<Landing />}
+          />
+
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+
+          <Route
+            path="/register"
+            element={<Register />}
+          />
+
+          <Route
+            path="/dashboard"
+            element={<Dashboard />}
+          />
+
+        </Routes>
+
+      </BrowserRouter>
+
+    </div>
 
   );
 

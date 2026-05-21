@@ -12,11 +12,13 @@ export default function HeroSection() {
 
       transition={{ duration: 1 }}
 
-      className="relative overflow-hidden rounded-[40px] bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-white/10 p-16 mb-14 backdrop-blur-2xl"
+      className="relative overflow-hidden rounded-[30px] md:rounded-[40px] bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-white/10 p-6 md:p-16 mb-14 backdrop-blur-2xl"
 
     >
 
       <div className="max-w-3xl">
+
+        {/* TITLE */}
 
         <motion.h1
 
@@ -26,16 +28,21 @@ export default function HeroSection() {
 
           transition={{ delay: 0.3 }}
 
-          className="text-7xl font-extrabold leading-tight text-white"
+          className="text-5xl md:text-8xl font-extrabold leading-tight text-white"
 
         >
 
           AI Powered
+
           <span className="text-cyan-400">
+
             {" "}Waste Monitoring
+
           </span>
 
         </motion.h1>
+
+        {/* DESCRIPTION */}
 
         <motion.p
 
@@ -45,7 +52,7 @@ export default function HeroSection() {
 
           transition={{ delay: 0.6 }}
 
-          className="text-gray-300 mt-8 text-xl leading-9"
+          className="text-gray-300 mt-6 md:mt-8 text-base md:text-xl leading-8 md:leading-9"
 
         >
 
@@ -54,11 +61,29 @@ export default function HeroSection() {
 
         </motion.p>
 
+        {/* BUTTONS */}
+
+        <div className="flex flex-col md:flex-row gap-4 mt-8">
+
+          <button className="bg-cyan-500 hover:bg-cyan-600 transition px-8 py-4 rounded-2xl text-lg font-bold shadow-lg shadow-cyan-500/30">
+
+            Get Started
+
+          </button>
+
+          <button className="border border-white/10 hover:border-cyan-400 transition px-8 py-4 rounded-2xl text-lg font-semibold">
+
+            Learn More
+
+          </button>
+
+        </div>
+
       </div>
 
-      {/* GLOW */}
+      {/* GLOW EFFECT */}
 
-      <div className="absolute top-[-100px] right-[-100px] w-[300px] h-[300px] bg-cyan-500/30 rounded-full blur-[120px]" />
+      <div className="absolute top-[-100px] right-[-100px] w-[200px] md:w-[300px] h-[200px] md:h-[300px] bg-cyan-500/30 rounded-full blur-[120px]" />
 
     </motion.div>
 
