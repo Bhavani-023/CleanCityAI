@@ -1,14 +1,23 @@
-from jose import jwt, JWTError
+from passlib.context import CryptContext
 
-SECRET_KEY = "cleancity_secret_key"
-ALGORITHM = "HS256"
+pwd_context = CryptContext(
 
+    schemes=["bcrypt"],
 
-def decode_token(token: str):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload
-    except JWTError:
-        return None
-    
-    
+    deprecated="auto"
+
+)
+
+def hash_password(password: str):
+
+    return pwd_context.hash(password[:72])
+
+def verify_password(plain_password, hashed_password):
+
+    return pwd_context.verify(
+
+        plain_password[:72],
+
+        hashed_password
+
+    )
