@@ -1,10 +1,8 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import {
-
   useNavigate,
   Link,
-
 } from "react-router-dom";
 
 import API from "../api";
@@ -22,49 +20,48 @@ export default function Login() {
   // =========================
 
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
 
   // =========================
   // LOGIN FUNCTION
   // =========================
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+
+    e.preventDefault();
 
     try {
 
+      console.log("LOGIN CLICKED");
+
+      const formData = new URLSearchParams();
+
+      formData.append("username", email.trim());
+      formData.append("password", password.trim());
+
       const response = await API.post(
-
         "/login",
-
+        formData,
         {
-
-          email,
-
-          password,
-
+          headers: {
+            "Content-Type":
+              "application/x-www-form-urlencoded",
+          },
         }
-
       );
 
+      console.log(response.data);
+
       // SAVE TOKEN
-
       localStorage.setItem(
-
         "token",
-
         response.data.access_token
-
       );
 
       // SAVE LOGIN STATUS
-
       localStorage.setItem(
-
         "isLoggedIn",
-
         "true"
-
       );
 
       toast.success("Login Successful");
@@ -73,9 +70,13 @@ export default function Login() {
 
     } catch (error) {
 
+      console.log(error.response?.data);
       console.log(error);
 
-      toast.error("Invalid Credentials");
+      toast.error(
+        error.response?.data?.detail ||
+        "Invalid Credentials"
+      );
 
     }
 
@@ -91,7 +92,10 @@ export default function Login() {
 
       {/* LOGIN CARD */}
 
-      <div className="w-full max-w-[450px] bg-white/5 border border-white/10 rounded-[35px] p-10 backdrop-blur-2xl shadow-2xl shadow-cyan-500/10">
+      <form
+        onSubmit={handleLogin}
+        className="w-full max-w-[450px] bg-white/5 border border-white/10 rounded-[35px] p-10 backdrop-blur-2xl shadow-2xl shadow-cyan-500/10"
+      >
 
         {/* TITLE */}
 
@@ -122,17 +126,12 @@ export default function Login() {
           </label>
 
           <input
-
             type="email"
-
             placeholder="Enter your email"
-
             value={email}
-
             onChange={(e) => setEmail(e.target.value)}
-
             className="w-full mt-2 p-4 rounded-2xl bg-black/30 border border-white/10 text-white outline-none focus:border-cyan-400 transition"
-
+            required
           />
 
         </div>
@@ -148,17 +147,12 @@ export default function Login() {
           </label>
 
           <input
-
             type="password"
-
             placeholder="Enter your password"
-
             value={password}
-
             onChange={(e) => setPassword(e.target.value)}
-
             className="w-full mt-2 p-4 rounded-2xl bg-black/30 border border-white/10 text-white outline-none focus:border-cyan-400 transition"
-
+            required
           />
 
         </div>
@@ -166,11 +160,8 @@ export default function Login() {
         {/* LOGIN BUTTON */}
 
         <button
-
-          onClick={handleLogin}
-
+          type="submit"
           className="w-full bg-cyan-500 hover:bg-cyan-600 transition duration-300 p-4 rounded-2xl text-xl font-bold shadow-lg shadow-cyan-500/30"
-
         >
 
           Login
@@ -186,11 +177,8 @@ export default function Login() {
             Don't have an account?
 
             <Link
-
               to="/register"
-
               className="text-cyan-400 ml-2 hover:underline"
-
             >
 
               Create Account
@@ -201,7 +189,7 @@ export default function Login() {
 
         </div>
 
-      </div>
+      </form>
 
     </div>
 
