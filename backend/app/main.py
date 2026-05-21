@@ -5,11 +5,19 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 
 from app.routes import auth, complaint
+from app.database import engine
+
+from app.models.user import User
+
+from app.models.complaint import Complaint
 
 # =========================
 # CREATE FASTAPI APP
 # =========================
 app = FastAPI()
+User.metadata.create_all(bind=engine)
+
+Complaint.metadata.create_all(bind=engine)
 
 # =========================
 # CORS
