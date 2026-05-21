@@ -1,38 +1,57 @@
 export default function ComplaintCards({
 
   complaints,
-
   updateComplaintStatus,
   loading,
 
 }) {
-    // =========================
-// LOADING STATE
-// =========================
 
-if (loading) {
+  // =========================
+  // LOADING STATE
+  // =========================
 
-  return (
+  if (loading) {
 
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-14">
+    return (
 
-      {[1,2,3].map((item) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-14">
 
-        <div
+        {[1, 2, 3].map((item) => (
 
-          key={item}
+          <div
+            key={item}
+            className="bg-white/5 animate-pulse rounded-[30px] h-[420px]"
+          />
 
-          className="bg-white/5 animate-pulse rounded-[30px] h-[420px]"
+        ))}
 
-        />
+      </div>
 
-      ))}
+    );
 
-    </div>
+  }
 
-  );
+  // =========================
+  // NO COMPLAINTS
+  // =========================
 
-}
+  if (!complaints || complaints.length === 0) {
+
+    return (
+
+      <div className="text-white text-center mt-20 text-2xl">
+
+        No complaints found
+
+      </div>
+
+    );
+
+  }
+
+  // =========================
+  // MAIN UI
+  // =========================
 
   return (
 
@@ -43,11 +62,15 @@ if (loading) {
       <div className="mb-10">
 
         <h1 className="text-4xl font-bold text-cyan-400">
+
           Recent Complaints
+
         </h1>
 
         <p className="text-gray-400 mt-2">
+
           Monitor and track reported waste issues
+
         </p>
 
       </div>
@@ -68,7 +91,7 @@ if (loading) {
             <div className="overflow-hidden">
 
               <img
-                src={`http://127.0.0.1:8000/${complaint.image_url}`}
+                src={`https://cleancityai-1.onrender.com/${complaint.image_url}`}
                 alt="complaint"
                 className="w-full h-64 object-cover group-hover:scale-110 transition duration-500"
               />
@@ -84,7 +107,9 @@ if (loading) {
               <div className="flex items-center justify-between">
 
                 <h1 className="text-2xl font-bold text-white">
+
                   Complaint #{complaint.id}
+
                 </h1>
 
                 <div className="bg-cyan-500/20 border border-cyan-400/30 px-4 py-1 rounded-full text-cyan-300 text-sm">
@@ -112,9 +137,11 @@ if (loading) {
                   <span>📍</span>
 
                   <p>
+
                     {complaint.latitude},
                     {" "}
                     {complaint.longitude}
+
                   </p>
 
                 </div>
@@ -163,7 +190,9 @@ if (loading) {
                     }
                     className="bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 px-4 py-2 rounded-xl text-red-300 transition"
                   >
+
                     Pending
+
                   </button>
 
                   {/* IN PROGRESS */}
@@ -177,7 +206,9 @@ if (loading) {
                     }
                     className="bg-yellow-500/20 hover:bg-yellow-500/40 border border-yellow-500/30 px-4 py-2 rounded-xl text-yellow-300 transition"
                   >
+
                     In Progress
+
                   </button>
 
                   {/* RESOLVED */}
@@ -191,7 +222,9 @@ if (loading) {
                     }
                     className="bg-green-500/20 hover:bg-green-500/40 border border-green-500/30 px-4 py-2 rounded-xl text-green-300 transition"
                   >
+
                     Resolved
+
                   </button>
 
                 </div>

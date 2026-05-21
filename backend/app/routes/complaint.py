@@ -1,15 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
-
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
-from app.database import get_db
+from jose import jwt, JWTError
 
+from app.database import get_db
 from app.models.complaint import Complaint
+
+from app.auth.jwt_handler import SECRET_KEY, ALGORITHM
 
 from fastapi import File, UploadFile
 
 import shutil
-
 import os
 
 # =========================
@@ -19,87 +21,145 @@ import os
 router = APIRouter()
 
 # =========================
+# JWT SECURITY
+# =========================
+
+security = HTTPBearer()
+
+# =========================
+# VERIFY TOKEN
+# =========================
+
+def verify_token(
+
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+
+):
+
+    token = credentials.credentials
+
+    try:
+
+        payload = jwt.decode(
+
+            token,
+
+            SECRET_KEY,
+
+            algorithms=[ALGORITHM]
+
+        )
+
+        user_id = payload.get("user_id")
+
+        if user_id is None:
+
+            raise HTTPException(
+
+                status_code=401,
+
+                detail="Invalid token"
+
+            )
+
+        return user_id
+
+    except JWTError:
+
+        raise HTTPException(
+
+            status_code=401,
+
+            detail="Invalid token"
+
+        )
+
+# =========================
 # CREATE COMPLAINT
 # =========================
 
 @router.post("/complaint")
-
 def create_complaint(
 
     description: str,
-
     latitude: float,
-
     longitude: float,
 
     image: UploadFile = File(...),
+
+    user_id: int = Depends(verify_token),
 
     db: Session = Depends(get_db)
 
 ):
 
-    # =========================
-    # CREATE UPLOADS FOLDER
-    # =========================
+    try:
 
-    os.makedirs("uploads", exist_ok=True)
+        # CREATE UPLOADS FOLDER
 
-    # =========================
-    # SAVE IMAGE
-    # =========================
+        os.makedirs("uploads", exist_ok=True)
 
-    file_path = f"uploads/{image.filename}"
+        # UNIQUE IMAGE NAME
 
-    with open(file_path, "wb") as buffer:
+        file_name = image.filename.replace(" ", "_")
 
-        shutil.copyfileobj(image.file, buffer)
+        file_path = f"uploads/{file_name}"
 
-    # =========================
-    # SIMPLE AI RESULT
-    # =========================
+        # SAVE IMAGE
 
-    prediction = "Garbage Detected"
+        with open(file_path, "wb") as buffer:
 
-    # =========================
-    # SAVE COMPLAINT
-    # =========================
+            shutil.copyfileobj(image.file, buffer)
 
-    new_complaint = Complaint(
+        # SAVE TO DATABASE
 
-        description=description,
+        new_complaint = Complaint(
 
-        image_url=file_path,
+            description=description,
 
-        latitude=latitude,
+            image_url=file_path,
 
-        longitude=longitude,
+            latitude=latitude,
 
-        user_id=1
+            longitude=longitude,
 
-    )
+            status="Pending",
 
-    db.add(new_complaint)
+            user_id=user_id
 
-    db.commit()
+        )
 
-    db.refresh(new_complaint)
+        db.add(new_complaint)
 
-    return {
+        db.commit()
 
-        "message": "Complaint submitted successfully",
+        db.refresh(new_complaint)
 
-        "complaint_id": new_complaint.id,
+        return {
 
-        "ai_result": prediction
+            "message": "Complaint submitted successfully",
 
-    }
+            "complaint_id": new_complaint.id
+
+        }
+
+    except Exception as e:
+
+        print("COMPLAINT ERROR:", e)
+
+        raise HTTPException(
+
+            status_code=500,
+
+            detail=str(e)
+
+        )
 
 # =========================
 # GET COMPLAINTS
 # =========================
 
 @router.get("/complaints")
-
 def get_complaints(
 
     db: Session = Depends(get_db)
@@ -115,7 +175,6 @@ def get_complaints(
 # =========================
 
 @router.put("/complaint/{complaint_id}")
-
 def update_status(
 
     complaint_id: int,
