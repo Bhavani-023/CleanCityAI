@@ -28,7 +28,7 @@ export default function HeroSection() {
 
           transition={{ delay: 0.3 }}
 
-          className="text-4xl sm:text-5xl md:text-8xl font-extrabold leading-[1.1] text-white"
+          className="text-3xl sm:text-5xl md:text-8xl font-extrabold leading-[1.1] text-white"
 
         >
 

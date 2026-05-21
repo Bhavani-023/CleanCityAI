@@ -8,6 +8,7 @@ import {
 export default function Sidebar() {
 
   return (
+    <>
 
     <div className="fixed left-0 top-0 h-screen w-[70px] md:w-[220px] bg-[#070B1A] border-r border-white/10 p-3 md:p-4 md:p-6 z-50">
 
@@ -92,6 +93,8 @@ export default function Sidebar() {
       </div>
 
     </div>
+
+    </>
 
   );
 

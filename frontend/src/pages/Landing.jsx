@@ -100,7 +100,7 @@ export default function Landing() {
 
         {/* FEATURE 1 */}
 
-        <div className="bg-white/5 p-6 md:p-8 rounded-3xl border border-gray-800 backdrop-blur-lg hover:scale-105 transition duration-300">
+        <div className="bg-white/5 p-6 md:p-5 md:p-8 rounded-3xl border border-gray-800 backdrop-blur-lg hover:scale-105 transition duration-300">
 
           <h2 className="text-xl md:text-2xl font-bold text-cyan-400 mb-4">
 
@@ -118,7 +118,7 @@ export default function Landing() {
 
         {/* FEATURE 2 */}
 
-        <div className="bg-white/5 p-6 md:p-8 rounded-3xl border border-gray-800 backdrop-blur-lg hover:scale-105 transition duration-300">
+        <div className="bg-white/5 p-6 md:p-5 md:p-8 rounded-3xl border border-gray-800 backdrop-blur-lg hover:scale-105 transition duration-300">
 
           <h2 className="text-xl md:text-2xl font-bold text-purple-400 mb-4">
 
@@ -136,7 +136,7 @@ export default function Landing() {
 
         {/* FEATURE 3 */}
 
-        <div className="bg-white/5 p-6 md:p-8 rounded-3xl border border-gray-800 backdrop-blur-lg hover:scale-105 transition duration-300">
+        <div className="bg-white/5 p-6 md:p-5 md:p-8 rounded-3xl border border-gray-800 backdrop-blur-lg hover:scale-105 transition duration-300">
 
           <h2 className="text-xl md:text-2xl font-bold text-green-400 mb-4">
 

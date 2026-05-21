@@ -23,7 +23,7 @@ export default function ComplaintForm({
 
     <div className="mt-16 flex justify-center">
 
-      <div className="bg-white/5 border border-white/10 p-10 rounded-[30px] w-[750px] backdrop-blur-2xl shadow-2xl shadow-cyan-500/10">
+      <div className="bg-white/5 border border-white/10 p-5 md:p-10 rounded-[30px] w-[750px] backdrop-blur-2xl shadow-2xl shadow-cyan-500/10">
 
         <div className="mb-8">
 
