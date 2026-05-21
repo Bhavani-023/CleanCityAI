@@ -1,153 +1,46 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
-from pydantic import BaseModel
-
-from jose import jwt
-
-from passlib.context import CryptContext
+from app.database import get_db
+from app.models.user import User
+from app.schemas.user import UserCreate
+from app.utils.security import hash_password
 
 router = APIRouter()
 
-# =========================
-# SECRET KEY
-# =========================
-
-SECRET_KEY = "SECRET123"
-
-ALGORITHM = "HS256"
-
-# =========================
-# PASSWORD HASHING
-# =========================
-
-pwd_context = CryptContext(
-
-    schemes=["bcrypt"],
-
-    deprecated="auto"
-
-)
-
-# =========================
-# FAKE DATABASE
-# =========================
-
-users_db = {}
-
-# =========================
-# USER MODEL
-# =========================
-
-class User(BaseModel):
-
-    email: str
-
-    password: str
-
-# =========================
-# REGISTER
-# =========================
-
 @router.post("/register")
-
-def register(user: User):
+def register(user: UserCreate, db: Session = Depends(get_db)):
 
     # CHECK EXISTING USER
+    existing_user = db.query(User).filter(User.email == user.email).first()
 
-    if user.email in users_db:
+    if existing_user:
 
         raise HTTPException(
 
             status_code=400,
 
-            detail="User already exists"
+            detail="Email already registered"
 
         )
 
-    # HASH PASSWORD
+    # CREATE NEW USER
+    new_user = User(
 
-    hashed_password = pwd_context.hash(
+        email=user.email,
 
-        user.password
+        password=hash_password(user.password)
 
     )
 
-    # SAVE USER
+    db.add(new_user)
 
-    users_db[user.email] = {
+    db.commit()
 
-        "email": user.email,
-
-        "password": hashed_password,
-
-    }
+    db.refresh(new_user)
 
     return {
 
         "message": "User created successfully"
-
-    }
-
-# =========================
-# LOGIN
-# =========================
-
-@router.post("/login")
-
-def login(user: User):
-
-    # CHECK USER
-
-    db_user = users_db.get(user.email)
-
-    if not db_user:
-
-        raise HTTPException(
-
-            status_code=401,
-
-            detail="Invalid credentials"
-
-        )
-
-    # VERIFY PASSWORD
-
-    if not pwd_context.verify(
-
-        user.password,
-
-        db_user["password"]
-
-    ):
-
-        raise HTTPException(
-
-            status_code=401,
-
-            detail="Invalid credentials"
-
-        )
-
-    # CREATE TOKEN
-
-    token = jwt.encode(
-
-        {
-
-            "sub": user.email
-
-        },
-
-        SECRET_KEY,
-
-        algorithm=ALGORITHM
-
-    )
-
-    return {
-
-        "access_token": token,
-
-        "token_type": "bearer"
 
     }
