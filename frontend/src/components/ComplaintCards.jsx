@@ -14,7 +14,7 @@ export default function ComplaintCards({
 
     return (
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-14">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 mt-14">
 
         {[1, 2, 3].map((item) => (
 
@@ -93,7 +93,7 @@ export default function ComplaintCards({
               <img
                 src={`https://cleancityai-1.onrender.com/${complaint.image_url}`}
                 alt="complaint"
-                className="w-full h-64 object-cover group-hover:scale-110 transition duration-500"
+                className="w-full h-52 md:h-64 object-cover group-hover:scale-110 transition duration-500"
               />
 
             </div>

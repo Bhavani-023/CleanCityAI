@@ -9,11 +9,11 @@ export default function Sidebar() {
 
   return (
 
-    <div className="fixed left-0 top-0 h-screen w-[60px] md:w-[220px] bg-[#070B1A] border-r border-white/10 p-3 md:p-4 md:p-6 z-50">
+    <div className="fixed left-0 top-0 h-screen w-[70px] md:w-[220px] bg-[#070B1A] border-r border-white/10 p-3 md:p-4 md:p-6 z-50">
 
       {/* LOGO */}
 
-      <h1 className="text-xl md:text-3xl font-bold text-cyan-400 mb-10 md:mb-14">
+      <h1 className="text-lg md:text-3xl font-bold text-cyan-400 mb-10 md:mb-14">
 
         <span className="hidden md:block">
           CleanCityAI

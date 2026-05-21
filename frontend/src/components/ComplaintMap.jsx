@@ -51,7 +51,7 @@ export default function ComplaintMap({ complaints }) {
           zoom={11}
 
           style={{
-            height: "550px",
+            height: window.innerWidth < 768 ? "350px" : "550px",
             width: "100%",
           }}
         >
