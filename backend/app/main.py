@@ -27,15 +27,23 @@ Complaint.metadata.create_all(bind=engine)
 # CORS CONFIGURATION
 # =========================
 
+origins = [
+
+    "http://localhost:5173",
+
+    "https://clean-city-ai-aar.vercel.app",
+
+    "https://clean-city-ai-aar-git-main-bhavani-reddy-s-projects.vercel.app",
+
+    "https://clean-city-ai-aar-8oxm0v6ws-bhavani-reddy-s-projects.vercel.app",
+
+]
+
 app.add_middleware(
 
     CORSMiddleware,
 
-    allow_origins=[
-
-        "https://clean-city-ai-aar.vercel.app"
-
-    ],
+    allow_origins=origins,
 
     allow_credentials=True,
 
