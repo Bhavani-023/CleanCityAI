@@ -16,7 +16,7 @@ export default function HeroSection() {
 
     >
 
-      <div className="max-w-3xl">
+      <div className="max-w-3xl w-full">
 
         {/* TITLE */}
 
@@ -28,7 +28,7 @@ export default function HeroSection() {
 
           transition={{ delay: 0.3 }}
 
-          className="text-5xl md:text-8xl font-extrabold leading-tight text-white"
+          className="text-4xl md:text-8xl font-extrabold leading-tight text-white"
 
         >
 
@@ -52,7 +52,7 @@ export default function HeroSection() {
 
           transition={{ delay: 0.6 }}
 
-          className="text-gray-300 mt-6 md:mt-8 text-base md:text-xl leading-8 md:leading-9"
+         className="text-gray-300 mt-6 md:mt-8 text-base md:text-xl leading-7 md:leading-9"
 
         >
 
