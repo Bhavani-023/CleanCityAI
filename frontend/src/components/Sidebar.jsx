@@ -9,7 +9,7 @@ export default function Sidebar() {
 
   return (
 
-    <div className="fixed left-0 top-0 h-screen w-[70px] md:w-[220px] bg-[#070B1A] border-r border-white/10 p-4 md:p-6 z-50">
+    <div className="fixed left-0 top-0 h-screen w-[60px] md:w-[220px] bg-[#070B1A] border-r border-white/10 p-3 md:p-4 md:p-6 z-50">
 
       {/* LOGO */}
 
@@ -33,7 +33,7 @@ export default function Sidebar() {
 
         <a
           href="#"
-          className="flex items-center justify-center md:justify-start gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-4 rounded-2xl"
+          className="flex items-center justify-center md:justify-start gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-3 md:p-4 rounded-2xl"
         >
 
           <LayoutDashboard size={22} />
@@ -48,7 +48,7 @@ export default function Sidebar() {
 
         <a
           href="#map"
-          className="flex items-center justify-center md:justify-start gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-4 rounded-2xl"
+          className="flex items-center justify-center md:justify-start gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-3 md:p-4 rounded-2xl"
         >
 
           <MapPinned size={22} />
@@ -63,7 +63,7 @@ export default function Sidebar() {
 
         <a
           href="#charts"
-          className="flex items-center justify-center md:justify-start gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-4 rounded-2xl"
+          className="flex items-center justify-center md:justify-start gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-3 md:p-4 rounded-2xl"
         >
 
           <FileBarChart2 size={22} />
@@ -78,7 +78,7 @@ export default function Sidebar() {
 
         <a
           href="#complaints"
-          className="flex items-center justify-center md:justify-start gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-4 rounded-2xl"
+          className="flex items-center justify-center md:justify-start gap-3 bg-white/5 hover:bg-cyan-500/20 transition p-3 md:p-4 rounded-2xl"
         >
 
           <Shield size={22} />

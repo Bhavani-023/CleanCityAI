@@ -245,7 +245,7 @@ export default function Dashboard() {
 
       {/* MAIN CONTENT */}
 
-      <div className="ml-[70px] md:ml-[220px] w-[calc(100%-70px)] md:w-[calc(100%-220px)] px-3 md:px-10 py-4 md:py-6 overflow-x-hidden">
+      <div className="ml-[60px] md:ml-[220px] w-auto px-3 md:px-10 py-4 md:py-6 overflow-x-hidden">
 
         {/* TOPBAR */}
 
