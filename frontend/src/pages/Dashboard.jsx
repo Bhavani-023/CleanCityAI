@@ -237,7 +237,7 @@ export default function Dashboard() {
 
   return (
 
-    <div className="min-h-screen bg-[#050816] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#050816] text-white overflow-x-auto md:overflow-x-hidden">
 
       {/* SIDEBAR */}
 
@@ -245,7 +245,7 @@ export default function Dashboard() {
 
       {/* MAIN CONTENT */}
 
-      <div className="ml-[60px] md:ml-[220px] w-auto px-3 md:px-10 py-4 md:py-6 overflow-x-hidden">
+      <div className="ml-[60px] md:ml-[220px] min-w-[900px] md:min-w-0 px-3 md:px-10 py-4 md:py-6">
 
         {/* TOPBAR */}
 
