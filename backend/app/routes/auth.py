@@ -18,14 +18,26 @@ pwd_context = CryptContext(
 def hash_password(password: str):
     return pwd_context.hash(password[:72])
 
+# VERIFY PASSWORD
+def verify_password(
+    plain_password,
+    hashed_password
+):
+    return pwd_context.verify(
+        plain_password[:72],
+        hashed_password
+    )
+
 # =========================
 # REGISTER
 # =========================
 
 @router.post("/register")
-def register(user: UserCreate, db: Session = Depends(get_db)):
+def register(
+    user: UserCreate,
+    db: Session = Depends(get_db)
+):
 
-    # CHECK EXISTING USER
     existing_user = db.query(User).filter(
         User.email == user.email
     ).first()
@@ -36,14 +48,15 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
             detail="Email already registered"
         )
 
-    # CREATE USER
     new_user = User(
         email=user.email,
         password=hash_password(user.password)
     )
 
     db.add(new_user)
+
     db.commit()
+
     db.refresh(new_user)
 
     return {
@@ -55,7 +68,10 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
 # =========================
 
 @router.post("/login")
-def login(user: UserCreate, db: Session = Depends(get_db)):
+def login(
+    user: UserCreate,
+    db: Session = Depends(get_db)
+):
 
     existing_user = db.query(User).filter(
         User.email == user.email
@@ -67,8 +83,8 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
             detail="Invalid Email"
         )
 
-    if not pwd_context.verify(
-        user.password[:72],
+    if not verify_password(
+        user.password,
         existing_user.password
     ):
         raise HTTPException(

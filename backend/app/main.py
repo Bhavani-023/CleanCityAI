@@ -1,20 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 
-import os
-
-from app.routes import auth, complaint
 from app.database import engine
-
 from app.models.user import User
-from app.models.complaint import Complaint
+
+from app.routes import auth
 
 app = FastAPI()
 
-# DATABASE TABLES
+# CREATE TABLES
 User.metadata.create_all(bind=engine)
-Complaint.metadata.create_all(bind=engine)
 
 # CORS
 app.add_middleware(
@@ -27,17 +22,9 @@ app.add_middleware(
 
 # ROUTES
 app.include_router(auth.router)
-app.include_router(complaint.router)
-
-# UPLOADS
-os.makedirs("uploads", exist_ok=True)
-
-app.mount(
-    "/uploads",
-    StaticFiles(directory="uploads"),
-    name="uploads"
-)
 
 @app.get("/")
 def home():
-    return {"message": "CleanCityAI Backend Running"}
+    return {
+        "message": "Backend Running"
+    }
