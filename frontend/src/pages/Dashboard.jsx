@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import HeroSection from "../components/HeroSection";
 import AnalyticsCards from "../components/AnalyticsCards";
+import ComplaintForm from "../components/ComplaintForm";
 
 import API from "../api";
 
@@ -11,7 +12,21 @@ import toast from "react-hot-toast";
 
 export default function Dashboard() {
 
+  // =========================
+  // STATES
+  // =========================
+
   const [complaints, setComplaints] = useState([]);
+
+  const [description, setDescription] = useState("");
+
+  const [image, setImage] = useState(null);
+
+  const [latitude, setLatitude] = useState("");
+
+  const [longitude, setLongitude] = useState("");
+
+  const [loading, setLoading] = useState(false);
 
   // =========================
   // FETCH COMPLAINTS
@@ -49,6 +64,120 @@ export default function Dashboard() {
 
   }, []);
 
+  // =========================
+  // LOCATION
+  // =========================
+
+  const getCurrentLocation = () => {
+
+    navigator.geolocation.getCurrentPosition(
+
+      (position) => {
+
+        setLatitude(position.coords.latitude);
+
+        setLongitude(position.coords.longitude);
+
+        toast.success("Location detected");
+
+      },
+
+      (error) => {
+
+        console.log(error);
+
+        toast.error("Unable to fetch location");
+
+      }
+
+    );
+
+  };
+
+  // =========================
+  // SUBMIT
+  // =========================
+
+  const handleSubmit = async () => {
+
+    try {
+
+      setLoading(true);
+
+      if (!description) {
+
+        toast.error("Please enter description");
+
+        return;
+
+      }
+
+      if (!image) {
+
+        toast.error("Please upload image");
+
+        return;
+
+      }
+
+      if (!latitude || !longitude) {
+
+        toast.error("Please select location");
+
+        return;
+
+      }
+
+      const formData = new FormData();
+
+      formData.append("image", image);
+
+      await API.post(
+
+        `/complaint?description=${description}&latitude=${latitude}&longitude=${longitude}`,
+
+        formData,
+
+        {
+
+          headers: {
+
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+
+            "Content-Type": "multipart/form-data",
+
+          },
+
+        }
+
+      );
+
+      toast.success("Complaint Submitted Successfully");
+
+      fetchComplaints();
+
+      setDescription("");
+
+      setImage(null);
+
+      setLatitude("");
+
+      setLongitude("");
+
+    } catch (error) {
+
+      console.log(error);
+
+      toast.error("Submission Failed");
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
   return (
 
     <div className="min-h-screen bg-[#050816] text-white overflow-x-hidden">
@@ -77,15 +206,31 @@ export default function Dashboard() {
 
         </div>
 
-        {/* CENTER */}
+        {/* FORM */}
 
-        <div className="flex items-center justify-center mt-20">
+        <div className="mt-10">
 
-          <h1 className="text-4xl md:text-5xl font-bold text-cyan-400 text-center">
+          <ComplaintForm
 
-            Dashboard Working ✅
+            description={description}
+            setDescription={setDescription}
 
-          </h1>
+            image={image}
+            setImage={setImage}
+
+            latitude={latitude}
+            setLatitude={setLatitude}
+
+            longitude={longitude}
+            setLongitude={setLongitude}
+
+            getCurrentLocation={getCurrentLocation}
+
+            handleSubmit={handleSubmit}
+
+            loading={loading}
+
+          />
 
         </div>
 
