@@ -1,2 +1,0 @@
-0 Garbage
-1 Clean

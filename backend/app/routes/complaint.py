@@ -3,7 +3,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from app.ai.predict import predict_image
 from jose import jwt, JWTError
-from app.ai.predict import predict_image
+
 from app.database import get_db
 from app.models.complaint import Complaint
 
@@ -107,79 +107,12 @@ def create_complaint(
 
         # SAVE IMAGE
 
-        with open(file_path, "wb") as buffer:
+        # SAVE IMAGE
 
-            shutil.copyfileobj(image.file, buffer)
+with open(file_path, "wb") as buffer:
 
-        # AI PREDICTION
+    shutil.copyfileobj(image.file, buffer)
 
-        prediction, confidence = predict_image(file_path)
-
-        # REJECT CLEAN IMAGE
-
-        if prediction.lower() != "garbage":
-
-            os.remove(file_path)
-
-            raise HTTPException(
-
-                status_code=400,
-
-                detail="No garbage detected in image"
-
-            )
-
-        # SAVE TO DATABASE
-
-        new_complaint = Complaint(
-
-            description=description,
-
-            image_url=file_path,
-
-            latitude=latitude,
-
-            longitude=longitude,
-
-            status="Pending",
-
-            user_id=user_id
-
-        )
-
-        db.add(new_complaint)
-
-        db.commit()
-
-        db.refresh(new_complaint)
-
-        return {
-
-            "message": "Complaint submitted successfully",
-
-            "complaint_id": new_complaint.id,
-
-            "prediction": prediction,
-
-            "confidence": confidence
-
-        }
-
-    except HTTPException as e:
-
-        raise e
-
-    except Exception as e:
-
-        print("COMPLAINT ERROR:", e)
-
-        raise HTTPException(
-
-            status_code=500,
-
-            detail=str(e)
-
-        )
 # =========================
 # AI DETECTION
 # =========================
