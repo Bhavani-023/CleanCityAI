@@ -9,6 +9,6 @@ bcrypt==4.0.1
 python-multipart==0.0.29
 pillow==11.1.0
 numpy==1.26.4
-tensorflow==2.15.0
+tensorflow-cpu==2.15.0
 h5py==3.10.0
 pydantic==2.12.5
