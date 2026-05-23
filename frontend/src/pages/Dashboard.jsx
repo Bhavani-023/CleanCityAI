@@ -6,6 +6,7 @@ import HeroSection from "../components/HeroSection";
 import AnalyticsCards from "../components/AnalyticsCards";
 import ComplaintForm from "../components/ComplaintForm";
 import ComplaintMap from "../components/ComplaintMap";
+import AnalyticsCharts from "../components/AnalyticsCharts";
 
 import API from "../api";
 
@@ -247,6 +248,25 @@ export default function Dashboard() {
             complaints?.length > 0 && (
 
               <ComplaintMap complaints={complaints} />
+
+            )
+
+          }
+
+        </div>
+
+        {/* CHARTS */}
+
+        <div
+          id="charts"
+          className="mt-14"
+        >
+
+          {
+
+            complaints?.length > 0 && (
+
+              <AnalyticsCharts complaints={complaints} />
 
             )
 
