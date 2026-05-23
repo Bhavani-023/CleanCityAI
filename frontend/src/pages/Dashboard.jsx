@@ -1,14 +1,49 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import HeroSection from "../components/HeroSection";
+import AnalyticsCards from "../components/AnalyticsCards";
+
+import API from "../api";
 
 import toast from "react-hot-toast";
 
 export default function Dashboard() {
 
+  const [complaints, setComplaints] = useState([]);
+
+  // =========================
+  // FETCH COMPLAINTS
+  // =========================
+
+  const fetchComplaints = async () => {
+
+    try {
+
+      const response = await API.get("/complaints");
+
+      setComplaints(response.data || []);
+
+    } catch (error) {
+
+      console.log(error);
+
+      setComplaints([]);
+
+      toast.error("Failed to fetch complaints");
+
+    }
+
+  };
+
+  // =========================
+  // LOAD
+  // =========================
+
   useEffect(() => {
+
+    fetchComplaints();
 
     toast.success("Dashboard Loaded");
 
@@ -33,6 +68,14 @@ export default function Dashboard() {
         {/* HERO */}
 
         <HeroSection />
+
+        {/* ANALYTICS */}
+
+        <div className="mt-10">
+
+          <AnalyticsCards complaints={complaints} />
+
+        </div>
 
         {/* CENTER */}
 
