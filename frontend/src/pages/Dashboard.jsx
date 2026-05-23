@@ -37,29 +37,29 @@ export default function Dashboard() {
 
   const fetchComplaints = async () => {
 
-    try {
+  try {
 
-      setLoading(true);
+    setLoading(true);
 
-      const response = await API.get("/complaints");
+    const response = await API.get("/complaints");
 
-      setComplaints(response.data || []);
+    setComplaints(response.data || []);
 
-    } catch (error) {
+  } catch (error) {
 
-      console.log(error);
+    console.log(error);
 
-      setComplaints([]);
+    setComplaints([]);
 
-      toast.error("Failed to fetch complaints");
+    toast.error("Failed to fetch complaints");
 
-    } finally {
+  } finally {
 
-      setLoading(false);
+    setLoading(false);
 
-    }
+  }
 
-  };
+};
 
   // =========================
   // LOAD DATA
@@ -234,23 +234,9 @@ export default function Dashboard() {
 
   };
 
-  // =========================
-  // LOADING SCREEN
-  // =========================
 
-  if (loading) {
 
-    return (
-
-      <div className="min-h-screen bg-[#050816] flex items-center justify-center text-white text-2xl font-bold">
-
-        Loading Dashboard...
-
-      </div>
-
-    );
-
-  }
+  
 
   // =========================
   // UI
