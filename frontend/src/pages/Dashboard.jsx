@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
+import HeroSection from "../components/HeroSection";
 
 import toast from "react-hot-toast";
 
@@ -29,11 +30,15 @@ export default function Dashboard() {
 
         <Topbar />
 
+        {/* HERO */}
+
+        <HeroSection />
+
         {/* CENTER */}
 
-        <div className="flex items-center justify-center mt-40">
+        <div className="flex items-center justify-center mt-20">
 
-          <h1 className="text-5xl font-bold text-cyan-400">
+          <h1 className="text-4xl md:text-5xl font-bold text-cyan-400 text-center">
 
             Dashboard Working ✅
 
