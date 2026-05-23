@@ -13,3 +13,4 @@ pydantic==2.12.5
 opencv-python-headless==4.10.0.84
 scikit-learn==1.5.1
 joblib==1.4.2
+email-validator==2.2.0
