@@ -18,7 +18,13 @@ export default function AnalyticsCharts({
   // SAFETY CHECK
   // =========================
 
-  if (!complaints || complaints.length === 0) {
+  if (!Array.isArray(complaints)) {
+
+    return null;
+
+  }
+
+  if (complaints.length === 0) {
 
     return null;
 
@@ -33,7 +39,7 @@ export default function AnalyticsCharts({
     {
       name: "Pending",
 
-      value: complaints.filter(
+      value: (complaints || []).filter(
         (c) => c.status === "Pending"
       ).length,
     },
@@ -41,7 +47,7 @@ export default function AnalyticsCharts({
     {
       name: "In Progress",
 
-      value: complaints.filter(
+      value: (complaints || []).filter(
         (c) => c.status === "In Progress"
       ).length,
     },
@@ -49,7 +55,7 @@ export default function AnalyticsCharts({
     {
       name: "Resolved",
 
-      value: complaints.filter(
+      value: (complaints || []).filter(
         (c) => c.status === "Resolved"
       ).length,
     },

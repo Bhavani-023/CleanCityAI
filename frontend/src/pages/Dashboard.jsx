@@ -41,7 +41,15 @@ export default function Dashboard() {
 
       const response = await API.get("/complaints");
 
-      setComplaints(response.data || []);
+      setComplaints(
+
+        Array.isArray(response.data)
+
+          ? response.data
+
+          : []
+
+      );
 
     } catch (error) {
 
@@ -138,6 +146,8 @@ export default function Dashboard() {
 
       setLoading(true);
 
+      // VALIDATION
+
       if (!description) {
 
         toast.error("Please enter description");
@@ -162,9 +172,13 @@ export default function Dashboard() {
 
       }
 
+      // FORM DATA
+
       const formData = new FormData();
 
       formData.append("image", image);
+
+      // API REQUEST
 
       await API.post(
 
@@ -188,9 +202,29 @@ export default function Dashboard() {
 
       toast.success("Complaint Submitted Successfully");
 
-      // REFRESH DATA
+      // SAFE REFRESH
 
-      fetchComplaints();
+      try {
+
+        const refreshed = await API.get("/complaints");
+
+        setComplaints(
+
+          Array.isArray(refreshed.data)
+
+            ? refreshed.data
+
+            : []
+
+        );
+
+      } catch (err) {
+
+        console.log(err);
+
+        setComplaints([]);
+
+      }
 
       // CLEAR FORM
 
@@ -215,6 +249,10 @@ export default function Dashboard() {
     }
 
   };
+
+  // =========================
+  // UI
+  // =========================
 
   return (
 
@@ -281,7 +319,7 @@ export default function Dashboard() {
 
           {
 
-            complaints?.length > 0 && (
+            Array.isArray(complaints) && complaints.length > 0 && (
 
               <ComplaintMap complaints={complaints} />
 
@@ -300,7 +338,7 @@ export default function Dashboard() {
 
           {
 
-            complaints?.length > 0 && (
+            Array.isArray(complaints) && complaints.length > 0 && (
 
               <AnalyticsCharts complaints={complaints} />
 
@@ -319,7 +357,7 @@ export default function Dashboard() {
 
           {
 
-            complaints?.length > 0 && (
+            Array.isArray(complaints) && complaints.length > 0 && (
 
               <ComplaintCards
 

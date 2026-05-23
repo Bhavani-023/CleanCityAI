@@ -1,4 +1,3 @@
-
 import {
   MapContainer,
   TileLayer,
@@ -7,12 +6,18 @@ import {
 } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
-delete L.Icon.Default.prototype._getIconUrl;
+
 import L from "leaflet";
 
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
+// =========================
+// FIX LEAFLET ICONS
+// =========================
+
+delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
@@ -20,27 +25,64 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-export default function ComplaintMap({ complaints }) {
+export default function ComplaintMap({
+
+  complaints = [],
+
+}) {
+
+  // =========================
+  // SAFETY CHECK
+  // =========================
+
+  if (!Array.isArray(complaints)) {
+
+    return null;
+
+  }
+
+  // FILTER VALID COMPLAINTS
+
+  const validComplaints = complaints.filter(
+
+    (complaint) =>
+
+      complaint.latitude &&
+      complaint.longitude
+
+  );
+
+  // =========================
+  // UI
+  // =========================
 
   return (
 
-    <div className="mt-20 px-10">
+    <div className="mt-20 px-4 md:px-10">
+
+      {/* HEADER */}
 
       <div className="flex items-center justify-between mb-8">
 
         <div>
 
-          <h1 className="text-4xl font-bold text-cyan-400">
+          <h1 className="text-3xl md:text-4xl font-bold text-cyan-400">
+
             Complaint Locations
+
           </h1>
 
-          <p className="text-gray-400 mt-2">
+          <p className="text-gray-400 mt-2 text-sm md:text-base">
+
             Live tracking of reported waste complaints
+
           </p>
 
         </div>
 
       </div>
+
+      {/* MAP */}
 
       <div className="rounded-[30px] overflow-hidden border border-white/10 shadow-2xl shadow-cyan-500/10">
 
@@ -51,48 +93,74 @@ export default function ComplaintMap({ complaints }) {
           zoom={11}
 
           style={{
-            height: window.innerWidth < 768 ? "350px" : "550px",
+
+            height:
+
+              window.innerWidth < 768
+
+                ? "350px"
+
+                : "550px",
+
             width: "100%",
+
           }}
+
         >
 
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {complaints.map((complaint) => (
+          {
 
-            <Marker
+            validComplaints.map((complaint) => (
 
-              key={complaint.id}
+              <Marker
 
-              position={[complaint.latitude, complaint.longitude]}
+                key={complaint.id}
 
-            >
+                position={[
 
-              <Popup>
+                  complaint.latitude,
 
-                <div className="text-black space-y-2">
+                  complaint.longitude,
 
-                  <h1 className="font-bold text-lg">
-                    {complaint.description}
-                  </h1>
+                ]}
 
-                  <p>
-                    Status: {complaint.status}
-                  </p>
+              >
 
-                  <p>
-                    AI: Garbage Detected
-                  </p>
+                <Popup>
 
-                </div>
+                  <div className="text-black space-y-2">
 
-              </Popup>
+                    <h1 className="font-bold text-lg">
 
-            </Marker>
+                      {complaint.description}
 
-          ))}
+                    </h1>
+
+                    <p>
+
+                      Status: {complaint.status}
+
+                    </p>
+
+                    <p>
+
+                      AI: Garbage Detected
+
+                    </p>
+
+                  </div>
+
+                </Popup>
+
+              </Marker>
+
+            ))
+
+          }
 
         </MapContainer>
 
