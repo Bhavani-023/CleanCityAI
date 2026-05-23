@@ -51,6 +51,19 @@ export default function ComplaintMap({
       complaint.longitude
 
   );
+  if (validComplaints.length === 0) {
+
+  return (
+
+    <div className="text-center text-gray-400 mt-20">
+
+      No complaint locations available
+
+    </div>
+
+  );
+
+}
 
   // =========================
   // UI

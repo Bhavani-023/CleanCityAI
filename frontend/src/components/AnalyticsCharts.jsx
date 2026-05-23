@@ -26,7 +26,15 @@ export default function AnalyticsCharts({
 
   if (complaints.length === 0) {
 
-    return null;
+    return (
+
+  <div className="text-center text-gray-400 mt-20">
+
+    No analytics data available
+
+  </div>
+
+);;
 
   }
 

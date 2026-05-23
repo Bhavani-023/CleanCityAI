@@ -23,9 +23,21 @@ export default function Login() {
 
   const [loading, setLoading] = useState(false);
 
-  
+  // =========================
+  // AUTO REDIRECT
+  // =========================
 
- 
+  useEffect(() => {
+
+    const token = localStorage.getItem("token");
+
+    if (token) {
+
+      navigate("/dashboard");
+
+    }
+
+  }, []);
 
   // =========================
   // LOGIN FUNCTION
@@ -40,11 +52,14 @@ export default function Login() {
       setLoading(true);
 
       const response = await API.post(
+
         "/login",
+
         {
           email: email.trim().toLowerCase(),
           password,
         }
+
       );
 
       // SAVE TOKEN
@@ -56,7 +71,7 @@ export default function Login() {
 
       toast.success("Login Successful");
 
-      // DELAY FOR SMOOTH REDIRECT
+      // SMOOTH REDIRECT
 
       setTimeout(() => {
 
@@ -188,9 +203,9 @@ export default function Login() {
 
             loading
 
-            ? "Logging In..."
+              ? "Logging In..."
 
-            : "Login"
+              : "Login"
 
           }
 
