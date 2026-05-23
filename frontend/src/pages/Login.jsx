@@ -23,21 +23,9 @@ export default function Login() {
 
   const [loading, setLoading] = useState(false);
 
-  // =========================
-  // AUTO REDIRECT IF LOGGED IN
-  // =========================
+  
 
-  useEffect(() => {
-
-    const token = localStorage.getItem("token");
-
-    if (token) {
-
-      navigate("/dashboard");
-
-    }
-
-  }, [navigate]);
+ 
 
   // =========================
   // LOGIN FUNCTION

@@ -1,85 +1,66 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";
-import { Navigate } from "react-router-dom";
+
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 
+import ProtectedRoute from "./components/ProtectedRoute";
+
 function App() {
 
   return (
 
-    <div className="overflow-x-hidden">
+    <BrowserRouter>
 
-      <BrowserRouter>
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
 
-        {/* TOASTER */}
+      <Routes>
 
-        <Toaster
+        <Route
+          path="/"
+          element={<Landing />}
+        />
 
-          position="top-right"
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
-          reverseOrder={false}
+        <Route
+          path="/register"
+          element={<Register />}
+        />
 
-          toastOptions={{
+        {/* PROTECTED DASHBOARD */}
 
-            style: {
+        <Route
 
-              background: "#111827",
+          path="/dashboard"
 
-              color: "#fff",
+          element={
 
-              border: "1px solid rgba(255,255,255,0.1)",
+            <ProtectedRoute>
 
-              borderRadius: "16px",
+              <Dashboard />
 
-              padding: "16px",
+            </ProtectedRoute>
 
-            },
-
-          }}
+          }
 
         />
 
-        {/* ROUTES */}
+      </Routes>
 
-        <Routes>
-
-          <Route
-            path="/"
-            element={<Landing />}
-          />
-
-          <Route
-            path="/login"
-            element={<Login />}
-          />
-
-          <Route
-            path="/register"
-            element={<Register />}
-          />
-
-          <Route
-          path="/dashboard"
-          element={
-            localStorage.getItem("token")
-            ? <Dashboard />
-            : <Navigate to="/login" />
-          }
-          />
-        </Routes>
-
-      </BrowserRouter>
-
-    </div>
+    </BrowserRouter>
 
   );
 
 }
 
 export default App;
-
-// fresh deploy
