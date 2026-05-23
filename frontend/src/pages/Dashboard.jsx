@@ -5,6 +5,7 @@ import Topbar from "../components/Topbar";
 import HeroSection from "../components/HeroSection";
 import AnalyticsCards from "../components/AnalyticsCards";
 import ComplaintForm from "../components/ComplaintForm";
+import ComplaintMap from "../components/ComplaintMap";
 
 import API from "../api";
 
@@ -231,6 +232,25 @@ export default function Dashboard() {
             loading={loading}
 
           />
+
+        </div>
+
+        {/* MAP */}
+
+        <div
+          id="map"
+          className="mt-14"
+        >
+
+          {
+
+            complaints?.length > 0 && (
+
+              <ComplaintMap complaints={complaints} />
+
+            )
+
+          }
 
         </div>
 
