@@ -1,12 +1,10 @@
 import { useEffect } from "react";
 
+import Sidebar from "../components/Sidebar";
+
 import toast from "react-hot-toast";
 
 export default function Dashboard() {
-
-  // =========================
-  // LOAD MESSAGE
-  // =========================
 
   useEffect(() => {
 
@@ -14,27 +12,19 @@ export default function Dashboard() {
 
   }, []);
 
-  // =========================
-  // UI
-  // =========================
-
   return (
 
-    <div className="min-h-screen bg-[#050816] flex items-center justify-center">
+    <div className="min-h-screen bg-[#050816] text-white overflow-x-hidden">
 
-      <div className="text-center">
+      <Sidebar />
 
-        <h1 className="text-5xl md:text-7xl font-extrabold text-cyan-400">
+      <div className="ml-0 md:ml-[220px] flex items-center justify-center min-h-screen">
+
+        <h1 className="text-5xl font-bold text-cyan-400">
 
           Dashboard Working ✅
 
         </h1>
-
-        <p className="text-gray-400 mt-6 text-xl">
-
-          CleanCityAI is running successfully
-
-        </p>
 
       </div>
 
