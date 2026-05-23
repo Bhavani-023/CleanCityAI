@@ -10,9 +10,19 @@ import {
 
 export default function AnalyticsCharts({
 
-  complaints,
+  complaints = [],
 
 }) {
+
+  // =========================
+  // SAFETY CHECK
+  // =========================
+
+  if (!complaints || complaints.length === 0) {
+
+    return null;
+
+  }
 
   // =========================
   // DATA
@@ -58,29 +68,36 @@ export default function AnalyticsCharts({
 
   return (
 
-    <div className="px-10 mt-20">
+    <div className="px-4 md:px-10 mt-20">
 
-      <div className="bg-white/5 border border-white/10 rounded-[30px] p-10 backdrop-blur-2xl shadow-2xl shadow-cyan-500/10">
+      <div className="bg-white/5 border border-white/10 rounded-[30px] p-6 md:p-10 backdrop-blur-2xl shadow-2xl shadow-cyan-500/10">
 
         {/* HEADER */}
 
         <div className="mb-10">
 
-          <h1 className="text-4xl font-bold text-cyan-400">
+          <h1 className="text-3xl md:text-4xl font-bold text-cyan-400">
+
             Complaint Analytics
+
           </h1>
 
-          <p className="text-gray-400 mt-2">
+          <p className="text-gray-400 mt-2 text-sm md:text-base">
+
             Live complaint status distribution
+
           </p>
 
         </div>
 
         {/* CHART */}
 
-        <div className="w-full h-[450px]">
+        <div className="w-full h-[350px] md:h-[450px]">
 
-          <ResponsiveContainer>
+          <ResponsiveContainer
+            width="100%"
+            height={350}
+          >
 
             <PieChart>
 
@@ -92,7 +109,7 @@ export default function AnalyticsCharts({
 
                 cy="50%"
 
-                outerRadius={160}
+                outerRadius={120}
 
                 dataKey="value"
 

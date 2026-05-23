@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import API from "../api";
 
 import Sidebar from "../components/Sidebar";
@@ -28,7 +29,7 @@ export default function Dashboard() {
 
   const [complaints, setComplaints] = useState([]);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // =========================
   // FETCH COMPLAINTS
@@ -42,17 +43,19 @@ export default function Dashboard() {
 
       const response = await API.get("/complaints");
 
-      setComplaints(response.data);
-
-      setLoading(false);
+      setComplaints(response.data || []);
 
     } catch (error) {
 
       console.log(error);
 
-      setLoading(false);
+      setComplaints([]);
 
       toast.error("Failed to fetch complaints");
+
+    } finally {
+
+      setLoading(false);
 
     }
 
@@ -217,19 +220,37 @@ export default function Dashboard() {
 
       setLongitude("");
 
-      setLoading(false);
-
     } catch (error) {
 
       console.log(error);
 
-      setLoading(false);
-
       toast.error("Submission Failed");
+
+    } finally {
+
+      setLoading(false);
 
     }
 
   };
+
+  // =========================
+  // LOADING SCREEN
+  // =========================
+
+  if (loading) {
+
+    return (
+
+      <div className="min-h-screen bg-[#050816] flex items-center justify-center text-white text-2xl font-bold">
+
+        Loading Dashboard...
+
+      </div>
+
+    );
+
+  }
 
   // =========================
   // UI
@@ -245,7 +266,7 @@ export default function Dashboard() {
 
       {/* MAIN CONTENT */}
 
-      <div className="ml-0 md:ml-[220px] pb-24 md:pb-6 w-auto px-3 md:px-10 py-4 md:py-6">
+      <div className="ml-0 md:ml-[220px] pb-24 md:pb-6 w-full px-3 md:px-10 py-4 md:py-6">
 
         {/* TOPBAR */}
 
@@ -293,44 +314,68 @@ export default function Dashboard() {
 
         {/* MAP */}
 
-        <div
-          id="map"
-          className="mt-14"
-        >
+        {
 
-          <ComplaintMap complaints={complaints} />
+          complaints?.length > 0 && (
 
-        </div>
+            <div
+              id="map"
+              className="mt-14"
+            >
+
+              <ComplaintMap complaints={complaints} />
+
+            </div>
+
+          )
+
+        }
 
         {/* CHARTS */}
 
-        <div
-          id="charts"
-          className="mt-14"
-        >
+        {
 
-          <AnalyticsCharts complaints={complaints} />
+          complaints?.length > 0 && (
 
-        </div>
+            <div
+              id="charts"
+              className="mt-14"
+            >
+
+              <AnalyticsCharts complaints={complaints} />
+
+            </div>
+
+          )
+
+        }
 
         {/* COMPLAINT CARDS */}
 
-        <div
-          id="complaints"
-          className="mt-14"
-        >
+        {
 
-          <ComplaintCards
+          complaints?.length > 0 && (
 
-            complaints={complaints}
+            <div
+              id="complaints"
+              className="mt-14"
+            >
 
-            updateComplaintStatus={updateComplaintStatus}
+              <ComplaintCards
 
-            loading={loading}
+                complaints={complaints}
 
-          />
+                updateComplaintStatus={updateComplaintStatus}
 
-        </div>
+                loading={loading}
+
+              />
+
+            </div>
+
+          )
+
+        }
 
       </div>
 
