@@ -7,6 +7,7 @@ import AnalyticsCards from "../components/AnalyticsCards";
 import ComplaintForm from "../components/ComplaintForm";
 import ComplaintMap from "../components/ComplaintMap";
 import AnalyticsCharts from "../components/AnalyticsCharts";
+import ComplaintCards from "../components/ComplaintCards";
 
 import API from "../api";
 
@@ -62,8 +63,6 @@ export default function Dashboard() {
 
     fetchComplaints();
 
-    toast.success("Dashboard Loaded");
-
   }, []);
 
   // =========================
@@ -93,6 +92,39 @@ export default function Dashboard() {
       }
 
     );
+
+  };
+
+  // =========================
+  // UPDATE STATUS
+  // =========================
+
+  const updateComplaintStatus = async (
+
+    complaintId,
+    status
+
+  ) => {
+
+    try {
+
+      await API.put(
+
+        `/complaint/${complaintId}?status=${status}`
+
+      );
+
+      toast.success("Status Updated");
+
+      fetchComplaints();
+
+    } catch (error) {
+
+      console.log(error);
+
+      toast.error("Status update failed");
+
+    }
 
   };
 
@@ -156,7 +188,11 @@ export default function Dashboard() {
 
       toast.success("Complaint Submitted Successfully");
 
+      // REFRESH DATA
+
       fetchComplaints();
+
+      // CLEAR FORM
 
       setDescription("");
 
@@ -267,6 +303,33 @@ export default function Dashboard() {
             complaints?.length > 0 && (
 
               <AnalyticsCharts complaints={complaints} />
+
+            )
+
+          }
+
+        </div>
+
+        {/* COMPLAINT CARDS */}
+
+        <div
+          id="complaints"
+          className="mt-14"
+        >
+
+          {
+
+            complaints?.length > 0 && (
+
+              <ComplaintCards
+
+                complaints={complaints}
+
+                updateComplaintStatus={updateComplaintStatus}
+
+                loading={loading}
+
+              />
 
             )
 
