@@ -99,15 +99,11 @@ def login(
 
     try:
 
-        # CLEAN EMAIL
-
-        email = user.email.strip().lower()
-
         # FIND USER
 
         existing_user = db.query(User).filter(
 
-            User.email == email
+            User.email == user.email
 
         ).first()
 
@@ -125,13 +121,14 @@ def login(
 
         # VERIFY PASSWORD
 
-        print("USER PASSWORD:", user.password)
-        print("DB HASH:", existing_user.password)
         password_valid = verify_password(
-              user.password,
-              existing_user.password
-              )
-        print("PASSWORD VALID:", password_valid)
+
+            user.password.strip(),
+
+            existing_user.password
+
+        )
+
         if not password_valid:
 
             raise HTTPException(
@@ -142,7 +139,7 @@ def login(
 
             )
 
-        # CREATE JWT TOKEN
+        # CREATE TOKEN
 
         token = create_access_token({
 
@@ -158,9 +155,13 @@ def login(
 
         }
 
+    except HTTPException as e:
+
+        raise e
+
     except Exception as e:
 
-        print("LOGIN ERROR:", e)
+        print("LOGIN ERROR:", str(e))
 
         raise HTTPException(
 
