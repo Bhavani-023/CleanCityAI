@@ -26,29 +26,35 @@ def register(
 
 ):
 
-    existing_user = db.query(User).filter(
-
-        User.email == user.email
-
-    ).first()
-
-    if existing_user:
-
-        raise HTTPException(
-
-            status_code=400,
-
-            detail="Email already registered"
-
-        )
-
     try:
+
+        # CLEAN EMAIL
+
+        email = user.email.strip().lower()
+
+        # CHECK EXISTING USER
+
+        existing_user = db.query(User).filter(
+
+            User.email == email
+
+        ).first()
+
+        if existing_user:
+
+            raise HTTPException(
+
+                status_code=400,
+
+                detail="Email already registered"
+
+            )
 
         # CREATE USER
 
         new_user = User(
 
-            email=user.email,
+            email=email,
 
             password=hash_password(user.password)
 
@@ -91,43 +97,49 @@ def login(
 
 ):
 
-    existing_user = db.query(User).filter(
-
-        User.email == user.email
-
-    ).first()
-
-    # CHECK EMAIL
-
-    if not existing_user:
-
-        raise HTTPException(
-
-            status_code=401,
-
-            detail="Invalid Email"
-
-        )
-
-    # VERIFY PASSWORD
-
-    if not verify_password(
-
-        user.password,
-
-        existing_user.password
-
-    ):
-
-        raise HTTPException(
-
-            status_code=401,
-
-            detail="Invalid Password"
-
-        )
-
     try:
+
+        # CLEAN EMAIL
+
+        email = user.email.strip().lower()
+
+        # FIND USER
+
+        existing_user = db.query(User).filter(
+
+            User.email == email
+
+        ).first()
+
+        # CHECK EMAIL
+
+        if not existing_user:
+
+            raise HTTPException(
+
+                status_code=401,
+
+                detail="Invalid Email"
+
+            )
+
+        # VERIFY PASSWORD
+
+        if not verify_password(
+
+            user.password,
+
+            existing_user.password
+
+        ):
+
+            raise HTTPException(
+
+                status_code=401,
+
+                detail="Invalid Password"
+
+            )
 
         # CREATE JWT TOKEN
 
