@@ -125,13 +125,14 @@ def login(
 
         # VERIFY PASSWORD
 
-        if not verify_password(
-
-            user.password,
-
-            existing_user.password
-
-        ):
+        print("USER PASSWORD:", user.password)
+        print("DB HASH:", existing_user.password)
+        password_valid = verify_password(
+              user.password,
+              existing_user.password
+              )
+        print("PASSWORD VALID:", password_valid)
+        if not password_valid:
 
             raise HTTPException(
 
