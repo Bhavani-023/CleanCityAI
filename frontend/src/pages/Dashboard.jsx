@@ -37,9 +37,11 @@ export default function Dashboard() {
 
   const fetchComplaints = async () => {
 
-    try {
+  try {
 
-      setLoading(true);
+    setLoading(true);
+
+    try {
 
       const response = await API.get("/complaints");
 
@@ -53,21 +55,22 @@ export default function Dashboard() {
 
       );
 
-    } catch (error) {
+    } catch (err) {
 
-      console.log(error);
+      console.log(err);
 
       setComplaints([]);
 
-      toast.error("Failed to fetch complaints");
-
-    } finally {
-
-      setLoading(false);
-
     }
 
-  };
+  } finally {
+
+    setLoading(false);
+
+  }
+
+};
+
 
   // =========================
   // LOAD

@@ -101,11 +101,10 @@ def login(
 
         # FIND USER
 
+        email = user.email.strip().lower()
         existing_user = db.query(User).filter(
-
-            User.email == user.email
-
-        ).first()
+            User.email == email
+            ).first()
 
         # CHECK EMAIL
 
@@ -156,17 +155,10 @@ def login(
         }
 
     except HTTPException as e:
-
         raise e
-
     except Exception as e:
-
-        print("LOGIN ERROR:", str(e))
-
+        print("REGISTER ERROR:", e)
         raise HTTPException(
-
             status_code=500,
-
-            detail="Login Failed"
-
-        )
+            detail="Registration Failed"
+            )
