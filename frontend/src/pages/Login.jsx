@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+
 import toast from "react-hot-toast";
 
 import {
@@ -11,18 +12,32 @@ import API from "../api";
 export default function Login() {
 
   const navigate = useNavigate();
-  useEffect(() => {
 
-  if (localStorage.getItem("token")) {
-
-    navigate("/dashboard");
-
-  }
-
-}, []);
+  // =========================
+  // STATES
+  // =========================
 
   const [email, setEmail] = useState("");
+
   const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  // =========================
+  // AUTO REDIRECT IF LOGGED IN
+  // =========================
+
+  useEffect(() => {
+
+    const token = localStorage.getItem("token");
+
+    if (token) {
+
+      navigate("/dashboard");
+
+    }
+
+  }, [navigate]);
 
   // =========================
   // LOGIN FUNCTION
@@ -34,37 +49,48 @@ export default function Login() {
 
     try {
 
+      setLoading(true);
+
       const response = await API.post(
         "/login",
         {
-          email,
+          email: email.trim().toLowerCase(),
           password,
         }
       );
 
       // SAVE TOKEN
+
       localStorage.setItem(
         "token",
         response.data.access_token
       );
 
-      localStorage.setItem(
-        "isLoggedIn",
-        "true"
-      );
-
       toast.success("Login Successful");
 
-      navigate("/dashboard");
+      // DELAY FOR SMOOTH REDIRECT
+
+      setTimeout(() => {
+
+        navigate("/dashboard");
+
+      }, 1000);
 
     } catch (error) {
 
       console.log(error);
 
       toast.error(
+
         error.response?.data?.detail ||
+
         "Login Failed"
+
       );
+
+    } finally {
+
+      setLoading(false);
 
     }
 
@@ -72,26 +98,29 @@ export default function Login() {
 
   return (
 
-    <div className="min-h-screen bg-[#050816] flex items-center justify-center px-6">
+    <div className="min-h-screen bg-[#050816] flex items-center justify-center px-4 sm:px-6">
 
       {/* LOGIN CARD */}
 
       <form
+
         onSubmit={handleLogin}
-        className="w-full max-w-[450px] bg-white/5 border border-white/10 rounded-[35px] p-10 backdrop-blur-2xl shadow-2xl shadow-cyan-500/10"
+
+        className="w-full max-w-[450px] bg-white/5 border border-white/10 rounded-[30px] md:rounded-[35px] p-6 md:p-10 backdrop-blur-2xl shadow-2xl shadow-cyan-500/10"
+
       >
 
         {/* TITLE */}
 
-        <div className="text-center mb-10">
+        <div className="text-center mb-8 md:mb-10">
 
-          <h1 className="text-5xl font-extrabold text-cyan-400">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-cyan-400">
 
             Welcome Back
 
           </h1>
 
-          <p className="text-gray-400 mt-4 text-lg">
+          <p className="text-gray-400 mt-4 text-base md:text-lg">
 
             Login to access CleanCityAI Dashboard
 
@@ -110,12 +139,19 @@ export default function Login() {
           </label>
 
           <input
+
             type="email"
+
             placeholder="Enter your email"
+
             value={email}
+
             onChange={(e) => setEmail(e.target.value)}
+
             className="w-full mt-2 p-4 rounded-2xl bg-black/30 border border-white/10 text-white outline-none focus:border-cyan-400 transition"
+
             required
+
           />
 
         </div>
@@ -131,12 +167,19 @@ export default function Login() {
           </label>
 
           <input
+
             type="password"
+
             placeholder="Enter your password"
+
             value={password}
+
             onChange={(e) => setPassword(e.target.value)}
+
             className="w-full mt-2 p-4 rounded-2xl bg-black/30 border border-white/10 text-white outline-none focus:border-cyan-400 transition"
+
             required
+
           />
 
         </div>
@@ -144,11 +187,24 @@ export default function Login() {
         {/* LOGIN BUTTON */}
 
         <button
+
           type="submit"
-          className="w-full bg-cyan-500 hover:bg-cyan-600 transition duration-300 p-4 rounded-2xl text-xl font-bold shadow-lg shadow-cyan-500/30"
+
+          disabled={loading}
+
+          className="w-full bg-cyan-500 hover:bg-cyan-600 transition duration-300 p-4 rounded-2xl text-xl font-bold shadow-lg shadow-cyan-500/30 disabled:opacity-50"
+
         >
 
-          Login
+          {
+
+            loading
+
+            ? "Logging In..."
+
+            : "Login"
+
+          }
 
         </button>
 
@@ -161,8 +217,11 @@ export default function Login() {
             Don't have an account?
 
             <Link
+
               to="/register"
+
               className="text-cyan-400 ml-2 hover:underline"
+
             >
 
               Create Account
