@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
-
 import API from "../api";
 
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import HeroSection from "../components/HeroSection";
 import AnalyticsCards from "../components/AnalyticsCards";
-import AnalyticsCharts from "../components/AnalyticsCharts";
+
+// TEMPORARILY DISABLED
+// import AnalyticsCharts from "../components/AnalyticsCharts";
+// import ComplaintMap from "../components/ComplaintMap";
+// import ComplaintCards from "../components/ComplaintCards";
+
 import ComplaintForm from "../components/ComplaintForm";
-import ComplaintMap from "../components/ComplaintMap";
-import ComplaintCards from "../components/ComplaintCards";
 
 import toast from "react-hot-toast";
 
@@ -29,7 +31,7 @@ export default function Dashboard() {
 
   const [complaints, setComplaints] = useState([]);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // =========================
   // FETCH COMPLAINTS
@@ -37,29 +39,29 @@ export default function Dashboard() {
 
   const fetchComplaints = async () => {
 
-  try {
+    try {
 
-    setLoading(true);
+      setLoading(true);
 
-    const response = await API.get("/complaints");
+      const response = await API.get("/complaints");
 
-    setComplaints(response.data || []);
+      setComplaints(response.data || []);
 
-  } catch (error) {
+    } catch (error) {
 
-    console.log(error);
+      console.log(error);
 
-    setComplaints([]);
+      setComplaints([]);
 
-    toast.error("Failed to fetch complaints");
+      toast.error("Failed to fetch complaints");
 
-  } finally {
+    } finally {
 
-    setLoading(false);
+      setLoading(false);
 
-  }
+    }
 
-};
+  };
 
   // =========================
   // LOAD DATA
@@ -234,10 +236,6 @@ export default function Dashboard() {
 
   };
 
-
-
-  
-
   // =========================
   // UI
   // =========================
@@ -298,70 +296,17 @@ export default function Dashboard() {
 
         </div>
 
-        {/* MAP */}
+        {/* TEMPORARILY DISABLED */}
 
-        {
-
-          complaints?.length > 0 && (
-
-            <div
-              id="map"
-              className="mt-14"
-            >
-
-              <ComplaintMap complaints={complaints} />
-
-            </div>
-
-          )
-
-        }
-
-        {/* CHARTS */}
-
-        {
-
-          complaints?.length > 0 && (
-
-            <div
-              id="charts"
-              className="mt-14"
-            >
-
-              <AnalyticsCharts complaints={complaints} />
-
-            </div>
-
-          )
-
-        }
-
-        {/* COMPLAINT CARDS */}
-
-        {
-
-          complaints?.length > 0 && (
-
-            <div
-              id="complaints"
-              className="mt-14"
-            >
-
-              <ComplaintCards
-
-                complaints={complaints}
-
-                updateComplaintStatus={updateComplaintStatus}
-
-                loading={loading}
-
-              />
-
-            </div>
-
-          )
-
-        }
+        {/*
+        <ComplaintMap complaints={complaints} />
+        <AnalyticsCharts complaints={complaints} />
+        <ComplaintCards
+          complaints={complaints}
+          updateComplaintStatus={updateComplaintStatus}
+          loading={loading}
+        />
+        */}
 
       </div>
 
