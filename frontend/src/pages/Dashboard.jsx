@@ -1,240 +1,18 @@
-import { useState, useEffect } from "react";
-import API from "../api";
-
-import Sidebar from "../components/Sidebar";
-import Topbar from "../components/Topbar";
-import HeroSection from "../components/HeroSection";
-import AnalyticsCards from "../components/AnalyticsCards";
-
-// TEMPORARILY DISABLED
-// import AnalyticsCharts from "../components/AnalyticsCharts";
-// import ComplaintMap from "../components/ComplaintMap";
-// import ComplaintCards from "../components/ComplaintCards";
-
-import ComplaintForm from "../components/ComplaintForm";
+import { useEffect } from "react";
 
 import toast from "react-hot-toast";
 
 export default function Dashboard() {
 
   // =========================
-  // STATES
-  // =========================
-
-  const [description, setDescription] = useState("");
-
-  const [image, setImage] = useState(null);
-
-  const [latitude, setLatitude] = useState("");
-
-  const [longitude, setLongitude] = useState("");
-
-  const [complaints, setComplaints] = useState([]);
-
-  const [loading, setLoading] = useState(false);
-
-  // =========================
-  // FETCH COMPLAINTS
-  // =========================
-
-  const fetchComplaints = async () => {
-
-    try {
-
-      setLoading(true);
-
-      const response = await API.get("/complaints");
-
-      setComplaints(response.data || []);
-
-    } catch (error) {
-
-      console.log(error);
-
-      setComplaints([]);
-
-      toast.error("Failed to fetch complaints");
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
-  };
-
-  // =========================
-  // LOAD DATA
+  // LOAD MESSAGE
   // =========================
 
   useEffect(() => {
 
-    fetchComplaints();
+    toast.success("Dashboard Loaded");
 
   }, []);
-
-  // =========================
-  // GET GPS LOCATION
-  // =========================
-
-  const getCurrentLocation = () => {
-
-    navigator.geolocation.getCurrentPosition(
-
-      (position) => {
-
-        setLatitude(position.coords.latitude);
-
-        setLongitude(position.coords.longitude);
-
-        toast.success("Location detected");
-
-      },
-
-      (error) => {
-
-        console.log(error);
-
-        toast.error("Unable to fetch location");
-
-      }
-
-    );
-
-  };
-
-  // =========================
-  // UPDATE STATUS
-  // =========================
-
-  const updateComplaintStatus = async (
-
-    complaintId,
-    status
-
-  ) => {
-
-    try {
-
-      await API.put(
-
-        `/complaint/${complaintId}?status=${status}`
-
-      );
-
-      toast.success("Status Updated");
-
-      fetchComplaints();
-
-    } catch (error) {
-
-      console.log(error);
-
-      toast.error("Status update failed");
-
-    }
-
-  };
-
-  // =========================
-  // SUBMIT COMPLAINT
-  // =========================
-
-  const handleSubmit = async () => {
-
-    try {
-
-      setLoading(true);
-
-      // VALIDATION
-
-      if (!description) {
-
-        toast.error("Please enter description");
-
-        setLoading(false);
-
-        return;
-
-      }
-
-      if (!image) {
-
-        toast.error("Please upload image");
-
-        setLoading(false);
-
-        return;
-
-      }
-
-      if (!latitude || !longitude) {
-
-        toast.error("Please select location");
-
-        setLoading(false);
-
-        return;
-
-      }
-
-      // FORM DATA
-
-      const formData = new FormData();
-
-      formData.append("image", image);
-
-      // API REQUEST
-
-      await API.post(
-
-        `/complaint?description=${description}&latitude=${latitude}&longitude=${longitude}`,
-
-        formData,
-
-        {
-
-          headers: {
-
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-
-            "Content-Type": "multipart/form-data",
-
-          },
-
-        }
-
-      );
-
-      toast.success("Complaint Submitted Successfully");
-
-      // REFRESH DATA
-
-      fetchComplaints();
-
-      // CLEAR FORM
-
-      setDescription("");
-
-      setImage(null);
-
-      setLatitude("");
-
-      setLongitude("");
-
-    } catch (error) {
-
-      console.log(error);
-
-      toast.error("Submission Failed");
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
-  };
 
   // =========================
   // UI
@@ -242,71 +20,21 @@ export default function Dashboard() {
 
   return (
 
-    <div className="min-h-screen bg-[#050816] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#050816] flex items-center justify-center">
 
-      {/* SIDEBAR */}
+      <div className="text-center">
 
-      <Sidebar />
+        <h1 className="text-5xl md:text-7xl font-extrabold text-cyan-400">
 
-      {/* MAIN CONTENT */}
+          Dashboard Working ✅
 
-      <div className="ml-0 md:ml-[220px] pb-24 md:pb-6 w-full px-3 md:px-10 py-4 md:py-6">
+        </h1>
 
-        {/* TOPBAR */}
+        <p className="text-gray-400 mt-6 text-xl">
 
-        <Topbar />
+          CleanCityAI is running successfully
 
-        {/* HERO */}
-
-        <HeroSection />
-
-        {/* ANALYTICS */}
-
-        <div className="mt-10">
-
-          <AnalyticsCards complaints={complaints} />
-
-        </div>
-
-        {/* COMPLAINT FORM */}
-
-        <div className="mt-10">
-
-          <ComplaintForm
-
-            description={description}
-            setDescription={setDescription}
-
-            image={image}
-            setImage={setImage}
-
-            latitude={latitude}
-            setLatitude={setLatitude}
-
-            longitude={longitude}
-            setLongitude={setLongitude}
-
-            getCurrentLocation={getCurrentLocation}
-
-            handleSubmit={handleSubmit}
-
-            loading={loading}
-
-          />
-
-        </div>
-
-        {/* TEMPORARILY DISABLED */}
-
-        {/*
-        <ComplaintMap complaints={complaints} />
-        <AnalyticsCharts complaints={complaints} />
-        <ComplaintCards
-          complaints={complaints}
-          updateComplaintStatus={updateComplaintStatus}
-          loading={loading}
-        />
-        */}
+        </p>
 
       </div>
 
